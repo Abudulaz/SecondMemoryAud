@@ -18,10 +18,12 @@ class RecordingService : Service() {
     private var mediaRecorder: MediaRecorder? = null
     private lateinit var audioFileManager: AudioFileManager
     private var currentRecordingFile: File? = null
+    private var recordingStartTime: Long = 0
 
     companion object {
         private const val NOTIFICATION_ID = 1
         private const val CHANNEL_ID = "RecordingServiceChannel"
+        const val ACTION_SAVE_RECORDING = "com.secondmemory.app.action.SAVE_RECORDING"
         var isRunning = false
             private set
     }
@@ -33,9 +35,17 @@ class RecordingService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(NOTIFICATION_ID, createNotification())
-        startRecording()
-        isRunning = true
+        when (intent?.action) {
+            ACTION_SAVE_RECORDING -> {
+                saveCurrentRecording()
+            }
+            else -> {
+                startForeground(NOTIFICATION_ID, createNotification())
+                startRecording()
+                isRunning = true
+                sendBroadcast(Intent("com.secondmemory.app.RECORDING_STATE_CHANGED"))
+            }
+        }
         return START_STICKY
     }
 
@@ -44,6 +54,7 @@ class RecordingService : Service() {
     private fun startRecording() {
         try {
             currentRecordingFile = audioFileManager.createNewAudioFile()
+            recordingStartTime = System.currentTimeMillis()
             
             mediaRecorder = MediaRecorder().apply {
                 setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -64,18 +75,22 @@ class RecordingService : Service() {
         }
     }
 
+    private fun saveCurrentRecording() {
+        if (isRunning && currentRecordingFile != null) {
+            stopRecording()
+            startRecording()
+        }
+    }
+
     private fun startFileManagementTimer() {
         Timer().scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
                 // 每小时检查一次录音文件
                 audioFileManager.manageRecordingFiles()
                 
-                // 如果当前录音文件超过1小时，创建新文件
-                currentRecordingFile?.let {
-                    if (System.currentTimeMillis() - it.lastModified() > 3600000) { // 1小时
-                        stopRecording()
-                        startRecording()
-                    }
+                // 如果当前录音超过24小时，自动保存并开始新录音
+                if (System.currentTimeMillis() - recordingStartTime > 24 * 3600000) { // 24小时
+                    saveCurrentRecording()
                 }
             }
         }, 3600000, 3600000) // 每小时执行一次
@@ -126,5 +141,6 @@ class RecordingService : Service() {
         super.onDestroy()
         stopRecording()
         isRunning = false
+        sendBroadcast(Intent("com.secondmemory.app.RECORDING_STATE_CHANGED"))
     }
 }

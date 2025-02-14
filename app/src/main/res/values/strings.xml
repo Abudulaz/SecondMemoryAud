@@ -7,8 +7,12 @@
     <string name="recording_inactive">录音已停止</string>
     <string name="start_recording">开始录音</string>
     <string name="stop_recording">停止录音</string>
+    <string name="save_recording">保存录音</string>
     <string name="settings">设置</string>
     <string name="permissions_required">需要录音和存储权限才能使用此应用</string>
+    <string name="battery_optimization_title">电池优化</string>
+    <string name="battery_optimization_message">为了确保录音服务能够在后台正常运行，请关闭电池优化。</string>
+    <string name="go_to_settings">前往设置</string>
 
     <!-- SettingsActivity -->
     <string name="auto_start_on_boot">开机自动启动录音</string>
@@ -23,6 +27,15 @@
     <!-- RecordingsActivity -->
     <string name="recordings_title">录音列表</string>
     <string name="play_recording">播放录音</string>
+
+    <!-- RecordingsActivity -->
+    <string name="delete">删除</string>
+    <string name="export">导出</string>
+    <string name="delete_recording_title">删除录音</string>
+    <string name="delete_recording_message">确定要删除这个录音文件吗？</string>
+    <string name="cancel">取消</string>
+    <string name="export_success">导出成功</string>
+    <string name="export_failed">导出失败</string>
 
     <!-- Notification -->
     <string name="channel_name">录音服务</string>

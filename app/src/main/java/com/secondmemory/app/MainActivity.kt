@@ -1,6 +1,7 @@
 package com.secondmemory.app
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -14,6 +15,7 @@ import com.secondmemory.app.service.RecordingService
 class MainActivity : AppCompatActivity() {
     private lateinit var statusText: TextView
     private lateinit var startStopButton: Button
+    private lateinit var saveButton: Button
     private lateinit var settingsButton: Button
     private lateinit var recordingsButton: Button
 
@@ -34,13 +36,14 @@ class MainActivity : AppCompatActivity() {
 
         statusText = findViewById(R.id.statusText)
         startStopButton = findViewById(R.id.startStopButton)
+        saveButton = findViewById(R.id.saveButton)
         settingsButton = findViewById(R.id.settingsButton)
         recordingsButton = findViewById(R.id.recordingsButton)
 
         setupButtons()
         checkPermissions()
+        checkBatteryOptimization()
         updateUI()
-        updateRecordingStatus()
     }
 
     private fun setupButtons() {
@@ -53,6 +56,15 @@ class MainActivity : AppCompatActivity() {
             updateUI()
         }
 
+        saveButton.setOnClickListener {
+            if (RecordingService.isRunning) {
+                val intent = Intent(this, RecordingService::class.java).apply {
+                    action = RecordingService.ACTION_SAVE_RECORDING
+                }
+                startService(intent)
+            }
+        }
+
         settingsButton.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
@@ -62,15 +74,29 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        updateRecordingStatus()
+    private fun checkBatteryOptimization() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            val powerManager = getSystemService(POWER_SERVICE) as android.os.PowerManager
+            val packageName = packageName
+            if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
+                androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle(R.string.battery_optimization_title)
+                    .setMessage(R.string.battery_optimization_message)
+                    .setPositiveButton(R.string.go_to_settings) { _, _ ->
+                        val intent = Intent(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+                            data = android.net.Uri.parse("package:$packageName")
+                        }
+                        startActivity(intent)
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .show()
+            }
+        }
     }
 
-    private fun updateRecordingStatus() {
-        val isRunning = RecordingService.isRunning
-        statusText.text = getString(if (isRunning) R.string.recording_active else R.string.recording_inactive)
-        startStopButton.text = getString(if (isRunning) R.string.stop_recording else R.string.start_recording)
+    override fun onResume() {
+        super.onResume()
+        updateUI()
     }
 
     private fun checkPermissions() {
@@ -124,20 +150,38 @@ class MainActivity : AppCompatActivity() {
     private fun startRecording() {
         val intent = Intent(this, RecordingService::class.java)
         ContextCompat.startForegroundService(this, intent)
+        updateUI(true)
     }
 
     private fun stopRecording() {
         stopService(Intent(this, RecordingService::class.java))
+        updateUI(false)
     }
 
-    private fun updateUI() {
-        if (RecordingService.isRunning) {
-            statusText.text = getString(R.string.recording_active)
-            startStopButton.text = getString(R.string.stop_recording)
-        } else {
-            statusText.text = getString(R.string.recording_inactive)
-            startStopButton.text = getString(R.string.start_recording)
+    private fun updateUI(isRecording: Boolean = RecordingService.isRunning) {
+        statusText.text = getString(if (isRecording) R.string.recording_active else R.string.recording_inactive)
+        startStopButton.text = getString(if (isRecording) R.string.stop_recording else R.string.start_recording)
+        saveButton.isEnabled = isRecording
+    }
+
+    // 注册广播接收器来监听录音服务的状态变化
+    private val recordingStateReceiver = object : android.content.BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            updateUI()
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        registerReceiver(
+            recordingStateReceiver,
+            android.content.IntentFilter("com.secondmemory.app.RECORDING_STATE_CHANGED")
+        )
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(recordingStateReceiver)
     }
 
     override fun onRequestPermissionsResult(
