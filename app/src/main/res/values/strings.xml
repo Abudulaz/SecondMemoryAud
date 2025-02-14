@@ -13,13 +13,16 @@
     <string name="battery_optimization_title">电池优化</string>
     <string name="battery_optimization_message">为了确保录音服务能够在后台正常运行，请关闭电池优化。</string>
     <string name="go_to_settings">前往设置</string>
+    <string name="recording_start_time">开始时间：%s</string>
+    <string name="recording_duration">已录制：%s</string>
+    <string name="recording_time_limit_note">24小时后自动保存\n保留7天</string>
 
     <!-- SettingsActivity -->
     <string name="auto_start_on_boot">开机自动启动录音</string>
     <string name="storage_title">存储信息</string>
     <string name="storage_info">已使用: %1$d MB\n可用空间: %2$d GB</string>
     <string name="retention_period_title">录音保留期限</string>
-    <string name="retention_period_info">录音文件将保留15天</string>
+    <string name="retention_period_info">录音文件将保留7天</string>
     <string name="oldest_recording">最早的录音: %1$s</string>
     <string name="no_recordings">当前没有录音文件</string>
     <string name="retention_period_note">注意：当存储空间不足时，旧的录音文件将被自动删除</string>

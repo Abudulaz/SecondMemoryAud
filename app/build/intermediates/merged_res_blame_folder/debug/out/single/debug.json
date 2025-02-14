@@ -1,5 +1,9 @@
 [
     {
+        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\drawable_recording_info_background.xml.flat",
+        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\drawable\\recording_info_background.xml"
+    },
+    {
         "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\layout_item_recording.xml.flat",
         "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\layout\\item_recording.xml"
     },

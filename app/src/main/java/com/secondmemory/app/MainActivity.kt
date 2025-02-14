@@ -11,13 +11,25 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.secondmemory.app.service.RecordingService
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var statusText: TextView
+    private lateinit var recordingStartTimeText: TextView
+    private lateinit var recordingDurationText: TextView
     private lateinit var startStopButton: Button
     private lateinit var saveButton: Button
     private lateinit var settingsButton: Button
     private lateinit var recordingsButton: Button
+    private var recordingStartTime: Long = 0
+    private val durationUpdateHandler = android.os.Handler(android.os.Looper.getMainLooper())
+    private val durationUpdateRunnable = object : Runnable {
+        override fun run() {
+            updateRecordingDuration()
+            durationUpdateHandler.postDelayed(this, 1000)
+        }
+    }
 
     private val PERMISSIONS = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
         arrayOf(Manifest.permission.RECORD_AUDIO)
@@ -35,6 +47,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         statusText = findViewById(R.id.statusText)
+        recordingStartTimeText = findViewById(R.id.recordingStartTimeText)
+        recordingDurationText = findViewById(R.id.recordingDurationText)
         startStopButton = findViewById(R.id.startStopButton)
         saveButton = findViewById(R.id.saveButton)
         settingsButton = findViewById(R.id.settingsButton)
@@ -150,18 +164,54 @@ class MainActivity : AppCompatActivity() {
     private fun startRecording() {
         val intent = Intent(this, RecordingService::class.java)
         ContextCompat.startForegroundService(this, intent)
+        recordingStartTime = System.currentTimeMillis()
         updateUI(true)
+        startDurationUpdates()
     }
 
     private fun stopRecording() {
         stopService(Intent(this, RecordingService::class.java))
         updateUI(false)
+        stopDurationUpdates()
     }
 
     private fun updateUI(isRecording: Boolean = RecordingService.isRunning) {
         statusText.text = getString(if (isRecording) R.string.recording_active else R.string.recording_inactive)
         startStopButton.text = getString(if (isRecording) R.string.stop_recording else R.string.start_recording)
         saveButton.isEnabled = isRecording
+        
+        if (isRecording) {
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            recordingStartTimeText.text = getString(R.string.recording_start_time, dateFormat.format(Date(recordingStartTime)))
+            updateRecordingDuration()
+        } else {
+            recordingStartTimeText.text = ""
+            recordingDurationText.text = ""
+        }
+    }
+
+    private fun updateRecordingDuration() {
+        if (RecordingService.isRunning) {
+            val duration = System.currentTimeMillis() - recordingStartTime
+            val hours = duration / (1000 * 60 * 60)
+            val minutes = (duration % (1000 * 60 * 60)) / (1000 * 60)
+            val seconds = (duration % (1000 * 60)) / 1000
+            recordingDurationText.text = getString(R.string.recording_duration, 
+                String.format("%02d:%02d:%02d", hours, minutes, seconds))
+        }
+    }
+
+    private fun startDurationUpdates() {
+        durationUpdateHandler.post(durationUpdateRunnable)
+    }
+
+    private fun stopDurationUpdates() {
+        durationUpdateHandler.removeCallbacks(durationUpdateRunnable)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopDurationUpdates()
     }
 
     // 注册广播接收器来监听录音服务的状态变化

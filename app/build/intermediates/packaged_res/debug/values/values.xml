@@ -30,9 +30,12 @@
     <string name="permissions_required">需要录音和存储权限才能使用此应用</string>
     <string name="play_recording">播放录音</string>
     <string name="recording_active">正在录音中…</string>
+    <string name="recording_duration">已录制：%s</string>
     <string name="recording_inactive">录音已停止</string>
+    <string name="recording_start_time">开始时间：%s</string>
+    <string name="recording_time_limit_note">24小时后自动保存\n保留7天</string>
     <string name="recordings_title">录音列表</string>
-    <string name="retention_period_info">录音文件将保留15天</string>
+    <string name="retention_period_info">录音文件将保留7天</string>
     <string name="retention_period_note">注意：当存储空间不足时，旧的录音文件将被自动删除</string>
     <string name="retention_period_title">录音保留期限</string>
     <string name="save_recording">保存录音</string>

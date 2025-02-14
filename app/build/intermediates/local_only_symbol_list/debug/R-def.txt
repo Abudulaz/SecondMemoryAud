@@ -15,6 +15,7 @@ drawable ic_launcher_foreground
 drawable ic_mic
 drawable ic_play
 drawable ic_stop
+drawable recording_info_background
 id action_delete
 id action_export
 id autoStartSwitch
@@ -22,7 +23,10 @@ id emptyText
 id playButton
 id recordingButtonsLayout
 id recordingDateText
+id recordingDurationText
+id recordingInfoCard
 id recordingNameText
+id recordingStartTimeText
 id recordingsButton
 id recordingsRecyclerView
 id retentionPeriodText
@@ -58,7 +62,10 @@ string oldest_recording
 string permissions_required
 string play_recording
 string recording_active
+string recording_duration
 string recording_inactive
+string recording_start_time
+string recording_time_limit_note
 string recordings_title
 string retention_period_info
 string retention_period_note

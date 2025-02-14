@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 
 class AudioFileManager(private val context: Context) {
     companion object {
-        private const val MAX_RETENTION_DAYS = 15 // 保存录音文件的最大天数
+        private const val MAX_RETENTION_DAYS = 7 // 保存录音文件的最大天数
         private const val AUDIO_FILE_PREFIX = "recording_"
         private const val AUDIO_FILE_EXTENSION = ".m4a"
     }

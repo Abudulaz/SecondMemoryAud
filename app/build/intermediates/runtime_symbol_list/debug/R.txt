@@ -3085,6 +3085,7 @@ int drawable notification_template_icon_bg 0x7f0700e0
 int drawable notification_template_icon_low_bg 0x7f0700e1
 int drawable notification_tile_bg 0x7f0700e2
 int drawable notify_panel_notification_icon_bg 0x7f0700e3
+int drawable recording_info_background 0x7f0700e7
 int drawable test_level_drawable 0x7f0700e4
 int drawable tooltip_frame_dark 0x7f0700e5
 int drawable tooltip_frame_light 0x7f0700e6
@@ -3452,7 +3453,10 @@ int id radio 0x7f080166
 int id ratio 0x7f080167
 int id recordingButtonsLayout 0x7f0801ff
 int id recordingDateText 0x7f080168
+int id recordingDurationText 0x7f080201
+int id recordingInfoCard 0x7f080204
 int id recordingNameText 0x7f080169
+int id recordingStartTimeText 0x7f080203
 int id recordingsButton 0x7f08016a
 int id recordingsRecyclerView 0x7f08016b
 int id rectangles 0x7f08016c
@@ -3980,7 +3984,10 @@ int string path_password_strike_through 0x7f0f00a4
 int string permissions_required 0x7f0f00a5
 int string play_recording 0x7f0f00a6
 int string recording_active 0x7f0f00a7
+int string recording_duration 0x7f0f00c4
 int string recording_inactive 0x7f0f00a8
+int string recording_start_time 0x7f0f00c5
+int string recording_time_limit_note 0x7f0f00c6
 int string recordings_title 0x7f0f00a9
 int string retention_period_info 0x7f0f00aa
 int string retention_period_note 0x7f0f00ab
