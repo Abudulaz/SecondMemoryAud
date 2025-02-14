@@ -1,7 +1,10 @@
 R_DEF: Internal format may change without notice
 local
+color accent
 color black
 color ic_launcher_background
+color primary
+color primary_dark
 color purple_200
 color purple_500
 color purple_700
@@ -10,14 +13,25 @@ color teal_700
 color white
 drawable ic_launcher_foreground
 drawable ic_mic
+drawable ic_play
+drawable ic_stop
 id autoStartSwitch
+id emptyText
+id playButton
+id recordingDateText
+id recordingNameText
+id recordingsButton
+id recordingsRecyclerView
 id retentionPeriodText
 id settingsButton
 id startStopButton
 id statusText
 id storageInfoText
+id titleText
 layout activity_main
+layout activity_recordings
 layout activity_settings
+layout item_recording
 mipmap ic_launcher
 mipmap ic_launcher_round
 string app_name
@@ -27,8 +41,10 @@ string channel_name
 string no_recordings
 string oldest_recording
 string permissions_required
+string play_recording
 string recording_active
 string recording_inactive
+string recordings_title
 string retention_period_info
 string retention_period_note
 string retention_period_title
@@ -37,4 +53,4 @@ string start_recording
 string stop_recording
 string storage_info
 string storage_title
-style Theme.SecondMemory
+style Theme.SecondMemoryAud

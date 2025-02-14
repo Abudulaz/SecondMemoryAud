@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SecondMemory</string>
+    <string name="app_name">SecondMemoryAud</string>
     
     <!-- MainActivity -->
     <string name="recording_active">正在录音中…</string>
@@ -19,6 +19,10 @@
     <string name="oldest_recording">最早的录音: %1$s</string>
     <string name="no_recordings">当前没有录音文件</string>
     <string name="retention_period_note">注意：当存储空间不足时，旧的录音文件将被自动删除</string>
+
+    <!-- RecordingsActivity -->
+    <string name="recordings_title">录音列表</string>
+    <string name="play_recording">播放录音</string>
 
     <!-- Notification -->
     <string name="channel_name">录音服务</string>

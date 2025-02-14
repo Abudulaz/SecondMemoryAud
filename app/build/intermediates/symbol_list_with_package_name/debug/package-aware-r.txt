@@ -1346,6 +1346,7 @@ color abc_tint_edittext
 color abc_tint_seek_thumb
 color abc_tint_spinner
 color abc_tint_switch_track
+color accent
 color accent_material_dark
 color accent_material_light
 color androidx_core_ripple_material_light
@@ -2071,6 +2072,8 @@ color mtrl_textinput_focused_box_stroke_color
 color mtrl_textinput_hovered_box_stroke_color
 color notification_action_color_filter
 color notification_icon_bg_color
+color primary
+color primary_dark
 color primary_dark_material_dark
 color primary_dark_material_light
 color primary_material_dark
@@ -3008,7 +3011,9 @@ drawable ic_mtrl_checked_circle
 drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
+drawable ic_play
 drawable ic_search_black_24
+drawable ic_stop
 drawable m3_avd_hide_password
 drawable m3_avd_show_password
 drawable m3_bottom_sheet_drag_handle
@@ -3260,6 +3265,7 @@ id edit_query
 id edit_text_id
 id elastic
 id embed
+id emptyText
 id end
 id endToStart
 id enterAlways
@@ -3435,6 +3441,7 @@ id pathRelative
 id peekHeight
 id percent
 id pin
+id playButton
 id position
 id postLayout
 id pressed
@@ -3442,6 +3449,10 @@ id progress_circular
 id progress_horizontal
 id radio
 id ratio
+id recordingDateText
+id recordingNameText
+id recordingsButton
+id recordingsRecyclerView
 id rectangles
 id report_drawn
 id retentionPeriodText
@@ -3550,6 +3561,7 @@ id textinput_suffix_text
 id time
 id title
 id titleDividerNoCustom
+id titleText
 id title_template
 id toggle
 id top
@@ -3701,6 +3713,7 @@ layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
 layout activity_main
+layout activity_recordings
 layout activity_settings
 layout custom_dialog
 layout design_bottom_navigation_item
@@ -3720,6 +3733,7 @@ layout design_text_input_end_icon
 layout design_text_input_start_icon
 layout ime_base_split_test_activity
 layout ime_secondary_split_test_activity
+layout item_recording
 layout m3_alert_dialog
 layout m3_alert_dialog_actions
 layout m3_alert_dialog_title
@@ -3950,8 +3964,10 @@ string path_password_eye_mask_strike_through
 string path_password_eye_mask_visible
 string path_password_strike_through
 string permissions_required
+string play_recording
 string recording_active
 string recording_inactive
+string recordings_title
 string retention_period_info
 string retention_period_note
 string retention_period_title
@@ -4592,7 +4608,7 @@ style Theme_MaterialComponents_Light_NoActionBar
 style Theme_MaterialComponents_Light_NoActionBar_Bridge
 style Theme_MaterialComponents_NoActionBar
 style Theme_MaterialComponents_NoActionBar_Bridge
-style Theme_SecondMemory
+style Theme_SecondMemoryAud
 style ThemeOverlay_AppCompat
 style ThemeOverlay_AppCompat_ActionBar
 style ThemeOverlay_AppCompat_Dark

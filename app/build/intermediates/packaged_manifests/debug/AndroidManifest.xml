@@ -5,12 +5,16 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="24"
+        android:minSdkVersion="26"
         android:targetSdkVersion="34" />
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
@@ -30,7 +34,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:testOnly="true"
-        android:theme="@style/Theme.SecondMemory" >
+        android:theme="@style/Theme.SecondMemoryAud" >
         <activity
             android:name="com.secondmemory.app.MainActivity"
             android:exported="true" >
@@ -43,6 +47,10 @@
         <activity
             android:name="com.secondmemory.app.SettingsActivity"
             android:label="@string/settings"
+            android:parentActivityName="com.secondmemory.app.MainActivity" />
+        <activity
+            android:name="com.secondmemory.app.RecordingsActivity"
+            android:label="@string/recordings_title"
             android:parentActivityName="com.secondmemory.app.MainActivity" />
 
         <service
