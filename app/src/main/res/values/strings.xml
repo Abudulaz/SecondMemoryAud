@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SecondMemory</string>
+    
+    <!-- MainActivity -->
+    <string name="recording_active">正在录音中…</string>
+    <string name="recording_inactive">录音已停止</string>
+    <string name="start_recording">开始录音</string>
+    <string name="stop_recording">停止录音</string>
+    <string name="settings">设置</string>
+    <string name="permissions_required">需要录音和存储权限才能使用此应用</string>
+
+    <!-- SettingsActivity -->
+    <string name="auto_start_on_boot">开机自动启动录音</string>
+    <string name="storage_title">存储信息</string>
+    <string name="storage_info">已使用: %1$d MB\n可用空间: %2$d GB</string>
+    <string name="retention_period_title">录音保留期限</string>
+    <string name="retention_period_info">录音文件将保留15天</string>
+    <string name="oldest_recording">最早的录音: %1$s</string>
+    <string name="no_recordings">当前没有录音文件</string>
+    <string name="retention_period_note">注意：当存储空间不足时，旧的录音文件将被自动删除</string>
+
+    <!-- Notification -->
+    <string name="channel_name">录音服务</string>
+    <string name="channel_description">显示录音服务的状态</string>
+</resources>

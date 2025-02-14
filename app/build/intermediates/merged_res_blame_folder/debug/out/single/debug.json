@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "com.secondmemory.app-merged_res-34:/layout_activity_main.xml.flat",
+        "source": "com.secondmemory.app-main-36:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.secondmemory.app-merged_res-34:/drawable_ic_mic.xml.flat",
+        "source": "com.secondmemory.app-main-36:/drawable/ic_mic.xml"
+    },
+    {
+        "merged": "com.secondmemory.app-merged_res-34:/layout_activity_settings.xml.flat",
+        "source": "com.secondmemory.app-main-36:/layout/activity_settings.xml"
+    },
+    {
+        "merged": "com.secondmemory.app-merged_res-34:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.secondmemory.app-main-36:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.secondmemory.app-merged_res-34:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.secondmemory.app-main-36:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.secondmemory.app-merged_res-34:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.secondmemory.app-main-36:/mipmap-anydpi-v26/ic_launcher.xml"
+    }
+]
