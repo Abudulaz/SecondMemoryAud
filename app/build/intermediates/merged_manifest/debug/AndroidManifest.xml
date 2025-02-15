@@ -12,8 +12,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <permission
         android:name="com.secondmemory.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
@@ -25,7 +27,7 @@
         android:allowBackup="true"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:debuggable="true"
-        android:extractNativeLibs="false"
+        android:extractNativeLibs="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -43,11 +45,19 @@
         </activity>
         <activity android:name="com.secondmemory.app.SettingsActivity" />
         <activity android:name="com.secondmemory.app.RecordingsActivity" />
-        <activity android:name="com.secondmemory.app.RecordingDetailActivity" />
+        <activity
+            android:name="com.secondmemory.app.RecordingDetailActivity"
+            android:exported="false"
+            android:label="@string/recording_detail_title" />
 
         <service
             android:name="com.secondmemory.app.service.RecordingService"
             android:foregroundServiceType="microphone" />
+        <service
+            android:name="com.secondmemory.app.service.VoskTranscriptionService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
 
         <receiver
             android:name="com.secondmemory.app.receiver.BootReceiver"

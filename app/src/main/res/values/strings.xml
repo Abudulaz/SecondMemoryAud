@@ -33,7 +33,12 @@
     <string name="recordings_title">录音列表</string>
     <string name="play_recording">播放录音</string>
     <string name="search_transcript">搜索文字内容…</string>
-    <string name="transcription_failed">语音识别失败</string>
+    <string name="recording_detail_title">录音详情</string>
+    <string name="transcription_failed">语音识别失败，请检查网络连接</string>
+    <string name="transcription_in_progress">正在识别语音内容…</string>
+    <string name="play_pause">播放/暂停</string>
+    <string name="transcription_auto_start">正在后台识别所有录音文件…</string>
+    <string name="transcription_completed">语音识别完成</string>
 
     <!-- RecordingsActivity -->
     <string name="delete">删除</string>

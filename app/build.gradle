@@ -21,20 +21,63 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+
+    // 配置资源打包选项
+    aaptOptions {
+        // 不压缩Vosk模型文件
+        noCompress 'am', 'conf', 'graph', 'ivector'
+    }
+
+    // 配置打包选项
+    packagingOptions {
+        // 配置JNI库打包
+        jniLibs {
+            useLegacyPackaging = true
+        }
+        
+        // 排除冲突的META-INF文件
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+    }
+
+    // 配置源文件集
+    sourceSets {
+        main {
+            assets.srcDirs = ['src/main/assets']
+        }
     }
 }
 
 dependencies {
+    // Android核心依赖
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    
+    // Markdown支持
+    implementation 'io.noties.markwon:core:4.6.2'
+    implementation 'io.noties.markwon:html:4.6.2'
+    implementation 'io.noties.markwon:image:4.6.2'
+
+    // 语音识别
+    implementation 'com.alphacephei:vosk-android:0.3.47'
+    implementation 'org.apache.commons:commons-io:1.3.2'
 }

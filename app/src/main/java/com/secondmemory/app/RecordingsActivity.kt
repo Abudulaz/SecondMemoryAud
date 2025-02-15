@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.secondmemory.app.service.TranscriptionService
 import com.secondmemory.app.utils.AudioFileManager
 import java.io.File
 import java.text.SimpleDateFormat
@@ -29,6 +30,11 @@ class RecordingsActivity : AppCompatActivity() {
         audioFileManager = AudioFileManager(this)
         recyclerView = findViewById(R.id.recordingsRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
+        
+        // 启动后台转写服务
+        startService(Intent(this, TranscriptionService::class.java).apply {
+            action = TranscriptionService.ACTION_TRANSCRIBE_ALL
+        })
         
         updateRecordingsList()
     }

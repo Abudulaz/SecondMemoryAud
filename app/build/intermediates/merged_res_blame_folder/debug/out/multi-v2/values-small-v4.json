@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.secondmemory.app-mergeDebugResources-30:/values-small-v4/values-small-v4.xml",
+            "outputFile": "com.secondmemory.app-mergeDebugResources-32:/values-small-v4/values-small-v4.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Zahee\\.gradle\\caches\\8.9\\transforms\\f3f5b93561adc3051da103802bdc17b7\\transformed\\material-1.11.0\\res\\values-small-v4\\values-small-v4.xml",

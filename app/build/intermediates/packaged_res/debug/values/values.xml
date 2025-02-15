@@ -30,8 +30,10 @@
     <string name="no_recordings">当前没有录音文件</string>
     <string name="oldest_recording">最早的录音: %1$s</string>
     <string name="permissions_required">需要录音和存储权限才能使用此应用</string>
+    <string name="play_pause">播放/暂停</string>
     <string name="play_recording">播放录音</string>
     <string name="recording_active">正在录音中…</string>
+    <string name="recording_detail_title">录音详情</string>
     <string name="recording_duration">已录制：%s</string>
     <string name="recording_inactive">录音已停止</string>
     <string name="recording_start_time">开始时间：%s</string>
@@ -47,7 +49,10 @@
     <string name="stop_recording">停止录音</string>
     <string name="storage_info">已使用: %1$d MB\n可用空间: %2$d GB</string>
     <string name="storage_title">存储信息</string>
-    <string name="transcription_failed">语音识别失败</string>
+    <string name="transcription_auto_start">正在后台识别所有录音文件…</string>
+    <string name="transcription_completed">语音识别完成</string>
+    <string name="transcription_failed">语音识别失败，请检查网络连接</string>
+    <string name="transcription_in_progress">正在识别语音内容…</string>
     <style name="Theme.SecondMemoryAud" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         
         <item name="colorPrimary">@color/purple_500</item>

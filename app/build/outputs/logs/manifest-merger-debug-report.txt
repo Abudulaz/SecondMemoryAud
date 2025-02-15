@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:2:1-46:12
-INJECTED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:2:1-46:12
-INJECTED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:2:1-46:12
-INJECTED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:2:1-46:12
+ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:2:1-57:12
+INJECTED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:2:1-57:12
+INJECTED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:2:1-57:12
+INJECTED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:2:1-57:12
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\f3f5b93561adc3051da103802bdc17b7\transformed\material-1.11.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\Zahee\.gradle\caches\8.9\transforms\ad0db0496e6155bb08af86d73ae22667\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\Zahee\.gradle\caches\8.9\transforms\c930ef92b16bdd03743f0acbb47e7186\transformed\appcompat-resources-1.6.1\AndroidManifest.xml:17:1-22:12
@@ -36,6 +36,9 @@ MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1] C:\Users\Z
 MERGED from [androidx.core:core-ktx:1.12.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\992fe0fe9cca3beb48be0db7adf1654f\transformed\core-ktx-1.12.0\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.annotation:annotation-experimental:1.3.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\2d87a447703cd5afccff3a0de9f66fa6\transformed\annotation-experimental-1.3.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\307bf04bbb292a04aa4856be7ddd9b01\transformed\cardview-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [io.noties.markwon:html:4.6.2] C:\Users\Zahee\.gradle\caches\8.9\transforms\facee811d9cd23caac6ee8fa327122fb\transformed\html-4.6.2\AndroidManifest.xml:2:1-11:12
+MERGED from [io.noties.markwon:image:4.6.2] C:\Users\Zahee\.gradle\caches\8.9\transforms\f5fe432efa49845dc6e7d630d9a2e060\transformed\image-4.6.2\AndroidManifest.xml:2:1-11:12
+MERGED from [io.noties.markwon:core:4.6.2] C:\Users\Zahee\.gradle\caches\8.9\transforms\cc78a8dd59bc286cb1ba9cda89bdfe32\transformed\core-4.6.2\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\1f31df00572f4d879f1883beb019caa9\transformed\cursoradapter-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\d83349e4abe579e46d3917001669514d\transformed\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Zahee\.gradle\caches\8.9\transforms\347c655364f411eb7a3d89caa1e98fc6\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
@@ -46,6 +49,8 @@ MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\Zahee\.gradle\cache
 MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\acceff6d8e1221398ff27caa811dd4bf\transformed\documentfile-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\bc52875f840d826fafe209b1e14446f9\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.print:print:1.0.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\dc75304d5920c106a3bb0d4b8495677c\transformed\print-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.alphacephei:vosk-android:0.3.47] C:\Users\Zahee\.gradle\caches\8.9\transforms\13c21e3ea0b8746320a3775b3ab14785\transformed\vosk-android-0.3.47\AndroidManifest.xml:2:1-7:12
+MERGED from [net.java.dev.jna:jna:5.13.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\6fd7b13315a876df115bfa9774d8a785\transformed\jna-5.13.0\AndroidManifest.xml:2:1-8:12
 	package
 		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:3:5-35
 		INJECTED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml
@@ -71,17 +76,25 @@ uses-permission#android.permission.FOREGROUND_SERVICE
 ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:8:5-77
 	android:name
 		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:8:22-74
+uses-permission#android.permission.POST_NOTIFICATIONS
+ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:9:5-77
+	android:name
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:9:22-74
 uses-permission#android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:9:5-95
+ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:10:5-95
 	android:name
-		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:9:22-92
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:10:22-92
 uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
-ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:10:5-81
+ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:11:5-81
 	android:name
-		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:10:22-78
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:11:22-78
+uses-permission#android.permission.INTERNET
+ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:12:5-67
+	android:name
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:12:22-64
 application
-ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:12:5-45:19
-INJECTED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:12:5-45:19
+ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:14:5-56:19
+INJECTED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:14:5-56:19
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\f3f5b93561adc3051da103802bdc17b7\transformed\material-1.11.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\f3f5b93561adc3051da103802bdc17b7\transformed\material-1.11.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\Zahee\.gradle\caches\8.9\transforms\ad0db0496e6155bb08af86d73ae22667\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
@@ -103,63 +116,77 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\Zahee\.gradle\cach
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.12.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\3a204146c18cc7a551420345a5f6b4eb\transformed\core-1.12.0\AndroidManifest.xml:28:18-86
 	android:supportsRtl
-		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:17:9-35
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:19:9-35
 	android:label
-		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:15:9-41
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:17:9-41
 	android:roundIcon
-		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:16:9-54
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:18:9-54
 	android:icon
-		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:14:9-43
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:16:9-43
 	android:allowBackup
-		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:13:9-35
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:15:9-35
 	android:theme
-		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:18:9-53
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:20:9-53
 activity#com.secondmemory.app.MainActivity
-ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:20:9-27:20
+ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:22:9-29:20
 	android:exported
-		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:22:13-36
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:24:13-36
 	android:name
-		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:21:13-41
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:23:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:23:13-26:29
+ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:25:13-28:29
 action#android.intent.action.MAIN
-ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:24:17-69
+ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:26:17-69
 	android:name
-		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:24:25-66
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:26:25-66
 category#android.intent.category.LAUNCHER
-ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:25:17-77
+ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:27:17-77
 	android:name
-		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:25:27-74
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:27:27-74
 activity#com.secondmemory.app.SettingsActivity
-ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:29:9-54
+ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:31:9-54
 	android:name
-		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:29:19-51
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:31:19-51
 activity#com.secondmemory.app.RecordingsActivity
-ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:30:9-56
+ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:32:9-56
 	android:name
-		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:30:19-53
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:32:19-53
 activity#com.secondmemory.app.RecordingDetailActivity
-ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:31:9-61
-	android:name
-		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:31:19-58
-service#com.secondmemory.app.service.RecordingService
-ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:33:9-35:58
-	android:foregroundServiceType
-		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:35:13-55
-	android:name
-		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:34:13-53
-receiver#com.secondmemory.app.receiver.BootReceiver
-ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:37:9-43:20
+ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:33:9-36:62
+	android:label
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:36:13-59
 	android:exported
-		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:39:13-36
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:35:13-37
 	android:name
-		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:38:13-50
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:34:13-52
+service#com.secondmemory.app.service.RecordingService
+ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:38:9-40:58
+	android:foregroundServiceType
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:40:13-55
+	android:name
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:39:13-53
+service#com.secondmemory.app.service.VoskTranscriptionService
+ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:42:9-46:56
+	android:enabled
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:44:13-35
+	android:exported
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:45:13-37
+	android:foregroundServiceType
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:46:13-53
+	android:name
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:43:13-61
+receiver#com.secondmemory.app.receiver.BootReceiver
+ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:48:9-54:20
+	android:exported
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:50:13-36
+	android:name
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:49:13-50
 intent-filter#action:name:android.intent.action.BOOT_COMPLETED
-ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:40:13-42:29
+ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:51:13-53:29
 action#android.intent.action.BOOT_COMPLETED
-ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:41:17-79
+ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:52:17-79
 	android:name
-		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:41:25-76
+		ADDED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml:52:25-76
 uses-sdk
 INJECTED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml
@@ -228,6 +255,12 @@ MERGED from [androidx.annotation:annotation-experimental:1.3.0] C:\Users\Zahee\.
 MERGED from [androidx.annotation:annotation-experimental:1.3.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\2d87a447703cd5afccff3a0de9f66fa6\transformed\annotation-experimental-1.3.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\307bf04bbb292a04aa4856be7ddd9b01\transformed\cardview-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\307bf04bbb292a04aa4856be7ddd9b01\transformed\cardview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [io.noties.markwon:html:4.6.2] C:\Users\Zahee\.gradle\caches\8.9\transforms\facee811d9cd23caac6ee8fa327122fb\transformed\html-4.6.2\AndroidManifest.xml:7:5-9:41
+MERGED from [io.noties.markwon:html:4.6.2] C:\Users\Zahee\.gradle\caches\8.9\transforms\facee811d9cd23caac6ee8fa327122fb\transformed\html-4.6.2\AndroidManifest.xml:7:5-9:41
+MERGED from [io.noties.markwon:image:4.6.2] C:\Users\Zahee\.gradle\caches\8.9\transforms\f5fe432efa49845dc6e7d630d9a2e060\transformed\image-4.6.2\AndroidManifest.xml:7:5-9:41
+MERGED from [io.noties.markwon:image:4.6.2] C:\Users\Zahee\.gradle\caches\8.9\transforms\f5fe432efa49845dc6e7d630d9a2e060\transformed\image-4.6.2\AndroidManifest.xml:7:5-9:41
+MERGED from [io.noties.markwon:core:4.6.2] C:\Users\Zahee\.gradle\caches\8.9\transforms\cc78a8dd59bc286cb1ba9cda89bdfe32\transformed\core-4.6.2\AndroidManifest.xml:7:5-9:41
+MERGED from [io.noties.markwon:core:4.6.2] C:\Users\Zahee\.gradle\caches\8.9\transforms\cc78a8dd59bc286cb1ba9cda89bdfe32\transformed\core-4.6.2\AndroidManifest.xml:7:5-9:41
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\1f31df00572f4d879f1883beb019caa9\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\1f31df00572f4d879f1883beb019caa9\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\d83349e4abe579e46d3917001669514d\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
@@ -248,10 +281,15 @@ MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\User
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\bc52875f840d826fafe209b1e14446f9\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.print:print:1.0.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\dc75304d5920c106a3bb0d4b8495677c\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.print:print:1.0.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\dc75304d5920c106a3bb0d4b8495677c\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.alphacephei:vosk-android:0.3.47] C:\Users\Zahee\.gradle\caches\8.9\transforms\13c21e3ea0b8746320a3775b3ab14785\transformed\vosk-android-0.3.47\AndroidManifest.xml:5:5-44
+MERGED from [com.alphacephei:vosk-android:0.3.47] C:\Users\Zahee\.gradle\caches\8.9\transforms\13c21e3ea0b8746320a3775b3ab14785\transformed\vosk-android-0.3.47\AndroidManifest.xml:5:5-44
+MERGED from [net.java.dev.jna:jna:5.13.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\6fd7b13315a876df115bfa9774d8a785\transformed\jna-5.13.0\AndroidManifest.xml:7:5-47
+MERGED from [net.java.dev.jna:jna:5.13.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\6fd7b13315a876df115bfa9774d8a785\transformed\jna-5.13.0\AndroidManifest.xml:7:5-47
 	android:targetSdkVersion
 		INJECTED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml
 	android:minSdkVersion
 		INJECTED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml
+		MERGED from E:\GitDesktop\SecondMemoryAud\app\src\main\AndroidManifest.xml
 provider#androidx.startup.InitializationProvider
 ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\Zahee\.gradle\caches\8.9\transforms\a019cc5febf95964ab69ad58ef6858ba\transformed\emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
 MERGED from [androidx.lifecycle:lifecycle-process:2.6.1] C:\Users\Zahee\.gradle\caches\8.9\transforms\2d59a84f7f209e258c6ad53252698808\transformed\lifecycle-process-2.6.1\AndroidManifest.xml:24:9-32:20

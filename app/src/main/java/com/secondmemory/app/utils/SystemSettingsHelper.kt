@@ -1,176 +1,63 @@
 package com.secondmemory.app.utils
 
+import android.Manifest
+import android.app.Activity
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
+import android.content.pm.PackageManager
 import android.os.Build
-import android.provider.Settings
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 
 class SystemSettingsHelper(private val context: Context) {
-    
-    fun openBatteryOptimizationSettings() {
-        when (Build.MANUFACTURER.lowercase()) {
-            "huawei", "honor" -> openHuaweiSettings()
-            "xiaomi", "redmi" -> openXiaomiSettings()
-            "oppo" -> openOppoSettings()
-            "vivo" -> openVivoSettings()
-            "samsung" -> openSamsungSettings()
-            else -> openDefaultBatterySettings()
+    private val requiredPermissions = when {
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> {
+            arrayOf(
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.READ_MEDIA_AUDIO,
+                Manifest.permission.POST_NOTIFICATIONS
+            )
+        }
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+            arrayOf(
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.POST_NOTIFICATIONS
+            )
+        }
+        else -> {
+            arrayOf(
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
         }
     }
 
-    fun openAutoStartSettings() {
-        when (Build.MANUFACTURER.lowercase()) {
-            "huawei", "honor" -> openHuaweiAutoStart()
-            "xiaomi", "redmi" -> openXiaomiAutoStart()
-            "oppo" -> openOppoAutoStart()
-            "vivo" -> openVivoAutoStart()
-            "samsung" -> openSamsungAutoStart()
-            else -> openAppSettings()
+    fun checkAndRequestPermissions(): Boolean {
+        if (context !is Activity) return false
+
+        val permissionsToRequest = mutableListOf<String>()
+        
+        for (permission in requiredPermissions) {
+            if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(permission)
+            }
+        }
+
+        return if (permissionsToRequest.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                context,
+                permissionsToRequest.toTypedArray(),
+                PERMISSIONS_REQUEST_CODE
+            )
+            false
+        } else {
+            true
         }
     }
 
-    private fun openHuaweiSettings() {
-        try {
-            val intent = Intent()
-            intent.setComponent(android.content.ComponentName(
-                "com.huawei.systemmanager",
-                "com.huawei.systemmanager.optimize.process.ProtectActivity"
-            ))
-            context.startActivity(intent)
-        } catch (e: Exception) {
-            openDefaultBatterySettings()
-        }
-    }
-
-    private fun openXiaomiSettings() {
-        try {
-            val intent = Intent()
-            intent.setComponent(android.content.ComponentName(
-                "com.miui.powerkeeper",
-                "com.miui.powerkeeper.ui.HiddenAppsConfigActivity"
-            ))
-            context.startActivity(intent)
-        } catch (e: Exception) {
-            openDefaultBatterySettings()
-        }
-    }
-
-    private fun openOppoSettings() {
-        try {
-            val intent = Intent()
-            intent.setComponent(android.content.ComponentName(
-                "com.coloros.safecenter",
-                "com.coloros.safecenter.permission.startup.StartupAppListActivity"
-            ))
-            context.startActivity(intent)
-        } catch (e: Exception) {
-            openDefaultBatterySettings()
-        }
-    }
-
-    private fun openVivoSettings() {
-        try {
-            val intent = Intent()
-            intent.setComponent(android.content.ComponentName(
-                "com.vivo.permissionmanager",
-                "com.vivo.permissionmanager.activity.BgStartUpManagerActivity"
-            ))
-            context.startActivity(intent)
-        } catch (e: Exception) {
-            openDefaultBatterySettings()
-        }
-    }
-
-    private fun openSamsungSettings() {
-        try {
-            val intent = Intent()
-            intent.setComponent(android.content.ComponentName(
-                "com.samsung.android.lool",
-                "com.samsung.android.sm.ui.battery.BatteryActivity"
-            ))
-            context.startActivity(intent)
-        } catch (e: Exception) {
-            openDefaultBatterySettings()
-        }
-    }
-
-    private fun openDefaultBatterySettings() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
-            intent.data = Uri.parse("package:${context.packageName}")
-            context.startActivity(intent)
-        }
-    }
-
-    private fun openHuaweiAutoStart() {
-        try {
-            val intent = Intent()
-            intent.setComponent(android.content.ComponentName(
-                "com.huawei.systemmanager",
-                "com.huawei.systemmanager.startupmgr.ui.StartupNormalAppListActivity"
-            ))
-            context.startActivity(intent)
-        } catch (e: Exception) {
-            openAppSettings()
-        }
-    }
-
-    private fun openXiaomiAutoStart() {
-        try {
-            val intent = Intent()
-            intent.setComponent(android.content.ComponentName(
-                "com.miui.securitycenter",
-                "com.miui.permcenter.autostart.AutoStartManagementActivity"
-            ))
-            context.startActivity(intent)
-        } catch (e: Exception) {
-            openAppSettings()
-        }
-    }
-
-    private fun openOppoAutoStart() {
-        try {
-            val intent = Intent()
-            intent.setComponent(android.content.ComponentName(
-                "com.coloros.safecenter",
-                "com.coloros.safecenter.startupapp.StartupAppListActivity"
-            ))
-            context.startActivity(intent)
-        } catch (e: Exception) {
-            openAppSettings()
-        }
-    }
-
-    private fun openVivoAutoStart() {
-        try {
-            val intent = Intent()
-            intent.setComponent(android.content.ComponentName(
-                "com.vivo.permissionmanager",
-                "com.vivo.permissionmanager.activity.BgStartUpManagerActivity"
-            ))
-            context.startActivity(intent)
-        } catch (e: Exception) {
-            openAppSettings()
-        }
-    }
-
-    private fun openSamsungAutoStart() {
-        try {
-            val intent = Intent()
-            intent.setComponent(android.content.ComponentName(
-                "com.samsung.android.lool",
-                "com.samsung.android.sm.ui.battery.BatteryActivity"
-            ))
-            context.startActivity(intent)
-        } catch (e: Exception) {
-            openAppSettings()
-        }
-    }
-
-    private fun openAppSettings() {
-        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        intent.data = Uri.parse("package:${context.packageName}")
-        context.startActivity(intent)
+    companion object {
+        const val PERMISSIONS_REQUEST_CODE = 100
     }
 }

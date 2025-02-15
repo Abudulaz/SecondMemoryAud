@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.secondmemory.app-mergeDebugResources-30:/values-zh/values-zh.xml",
+            "outputFile": "com.secondmemory.app-mergeDebugResources-32:/values-zh/values-zh.xml",
             "map": [
                 {
                     "source": "E:\\GitDesktop\\SecondMemoryAud\\app\\src\\main\\res\\values-zh\\strings.xml",

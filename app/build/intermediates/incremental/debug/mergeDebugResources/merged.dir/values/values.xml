@@ -1812,6 +1812,8 @@
     <item name="item_touch_helper_previous_elevation" type="id"/>
     <item name="line1" type="id"/>
     <item name="line3" type="id"/>
+    <item name="markwon_drawables_scheduler" type="id"/>
+    <item name="markwon_drawables_scheduler_last_text_hashcode" type="id"/>
     <item name="material_clock_face" type="id"/>
     <item name="material_clock_level" type="id"/>
     <item name="material_value_index" type="id"/>
@@ -2021,6 +2023,7 @@
     <string name="hide_bottom_view_on_scroll_behavior" translatable="false">com.google.android.material.behavior.HideBottomViewOnScrollBehavior</string>
     <string description="Content description for an icon that appears in the title area of a dialog" name="icon_content_description">Dialog Icon</string>
     <string name="item_view_role_description">Tab</string>
+    <string name="jna_library_appname">JNA bindings</string>
     <string name="m3_exceed_max_badge_text_suffix" translatable="false"><ns2:g example="Some te" id="part of a long text">%1$s</ns2:g><ns2:g example="…" id="suffix">%2$s</ns2:g></string>
     <string name="m3_ref_typeface_brand_medium" translatable="false">sans-serif-medium</string>
     <string name="m3_ref_typeface_brand_regular" translatable="false">sans-serif</string>
@@ -2135,8 +2138,10 @@
     <string name="path_password_eye_mask_visible" translatable="false">M2,4.27 L2,4.27 L4.54,1.73 L4.54,1.73 L4.54,1 L23,1 L23,23 L1,23 L1,4.27 Z</string>
     <string name="path_password_strike_through" translatable="false">M3.27,4.27 L19.74,20.74</string>
     <string name="permissions_required">需要录音和存储权限才能使用此应用</string>
+    <string name="play_pause">播放/暂停</string>
     <string name="play_recording">播放录音</string>
     <string name="recording_active">正在录音中…</string>
+    <string name="recording_detail_title">录音详情</string>
     <string name="recording_duration">已录制：%s</string>
     <string name="recording_inactive">录音已停止</string>
     <string name="recording_start_time">开始时间：%s</string>
@@ -2161,7 +2166,10 @@
     <string name="stop_recording">停止录音</string>
     <string name="storage_info">已使用: %1$d MB\n可用空间: %2$d GB</string>
     <string name="storage_title">存储信息</string>
-    <string name="transcription_failed">语音识别失败</string>
+    <string name="transcription_auto_start">正在后台识别所有录音文件…</string>
+    <string name="transcription_completed">语音识别完成</string>
+    <string name="transcription_failed">语音识别失败，请检查网络连接</string>
+    <string name="transcription_in_progress">正在识别语音内容…</string>
     <style name="AlertDialog.AppCompat" parent="Base.AlertDialog.AppCompat"/>
     <style name="AlertDialog.AppCompat.Light" parent="Base.AlertDialog.AppCompat.Light"/>
     <style name="Animation.AppCompat.Dialog" parent="Base.Animation.AppCompat.Dialog"/>

@@ -1,74 +1,198 @@
 package com.secondmemory.app
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.media.MediaPlayer
 import android.os.Bundle
-import android.speech.RecognitionListener
-import android.speech.SpeechRecognizer
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ProgressBar
+import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.secondmemory.app.service.VoskTranscriptionService
 import com.secondmemory.app.utils.AudioFileManager
+import com.secondmemory.app.utils.PreferencesManager
 import java.io.File
 
 class RecordingDetailActivity : AppCompatActivity() {
     private lateinit var audioFileManager: AudioFileManager
+    private lateinit var preferencesManager: PreferencesManager
     private lateinit var transcriptText: TextView
     private lateinit var searchInput: EditText
     private lateinit var transcriptProgress: ProgressBar
     private lateinit var searchResultsRecyclerView: RecyclerView
     private lateinit var currentFile: File
-    private var speechRecognizer: SpeechRecognizer? = null
+    private lateinit var playPauseButton: ImageButton
+    private lateinit var playbackSeekBar: SeekBar
+    private lateinit var currentTimeText: TextView
+    private lateinit var totalTimeText: TextView
+    private var mediaPlayer: MediaPlayer? = null
+    private var isPlaying = false
+    private val updateSeekBar = object : Runnable {
+        override fun run() {
+            mediaPlayer?.let { player ->
+                if (player.isPlaying) {
+                    playbackSeekBar.progress = player.currentPosition
+                    currentTimeText.text = formatTime(player.currentPosition)
+                    handler.postDelayed(this, 1000)
+                }
+            }
+        }
+    }
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recording_detail)
 
         audioFileManager = AudioFileManager(this)
+        preferencesManager = PreferencesManager(this)
         transcriptText = findViewById(R.id.transcriptText)
         searchInput = findViewById(R.id.searchInput)
         transcriptProgress = findViewById(R.id.transcriptProgress)
         searchResultsRecyclerView = findViewById(R.id.searchResultsRecyclerView)
+        playPauseButton = findViewById(R.id.playPauseButton)
+        playbackSeekBar = findViewById(R.id.playbackSeekBar)
+        currentTimeText = findViewById(R.id.currentTimeText)
+        totalTimeText = findViewById(R.id.totalTimeText)
 
         val fileName = intent.getStringExtra("fileName") ?: return
         currentFile = audioFileManager.getRecordingFile(fileName) ?: return
 
-        setupSpeechRecognizer()
+        setupPlayer(false) // 不自动播放
         setupSearchInput()
-        startTranscription()
+        loadTranscription()
     }
 
-    private fun setupSpeechRecognizer() {
-        if (SpeechRecognizer.isRecognitionAvailable(this)) {
-            speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
-            speechRecognizer?.setRecognitionListener(object : RecognitionListener {
-                override fun onReadyForSpeech(params: Bundle?) {}
-                override fun onBeginningOfSpeech() {}
-                override fun onRmsChanged(rmsdB: Float) {}
-                override fun onBufferReceived(buffer: ByteArray?) {}
-                override fun onEndOfSpeech() {}
-                override fun onError(error: Int) {
-                    transcriptProgress.visibility = View.GONE
-                    transcriptText.text = getString(R.string.transcription_failed)
+    private fun setupPlayer(autoPlay: Boolean) {
+        try {
+            mediaPlayer?.release()
+            mediaPlayer = MediaPlayer().apply {
+                setDataSource(currentFile.absolutePath)
+                setOnPreparedListener { player ->
+                    playbackSeekBar.max = player.duration
+                    totalTimeText.text = formatTime(player.duration)
+                    if (autoPlay) start()
                 }
+                prepareAsync()
+            }
 
-                override fun onResults(results: Bundle?) {
-                    val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                    if (!matches.isNullOrEmpty()) {
-                        transcriptText.text = matches[0]
+            playPauseButton.setOnClickListener {
+                if (isPlaying) {
+                    pausePlayback()
+                } else {
+                    startPlayback()
+                }
+            }
+
+            playbackSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    if (fromUser) {
+                        mediaPlayer?.seekTo(progress)
+                        currentTimeText.text = formatTime(progress)
+                    }
+                }
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            })
+
+            mediaPlayer?.setOnCompletionListener {
+                isPlaying = false
+                playPauseButton.setImageResource(R.drawable.ic_play)
+                handler.removeCallbacks(updateSeekBar)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun startPlayback() {
+        mediaPlayer?.start()
+        isPlaying = true
+        playPauseButton.setImageResource(R.drawable.ic_pause)
+        handler.post(updateSeekBar)
+    }
+
+    private fun pausePlayback() {
+        mediaPlayer?.pause()
+        isPlaying = false
+        playPauseButton.setImageResource(R.drawable.ic_play)
+        handler.removeCallbacks(updateSeekBar)
+    }
+
+    private fun formatTime(millis: Int): String {
+        val minutes = millis / 1000 / 60
+        val seconds = millis / 1000 % 60
+        return String.format("%02d:%02d", minutes, seconds)
+    }
+
+    private fun loadTranscription() {
+        val transcription = preferencesManager.getTranscription(currentFile.name)
+        if (transcription != null) {
+            transcriptText.text = transcription
+            transcriptProgress.visibility = View.GONE
+        } else {
+            transcriptText.text = getString(R.string.transcription_in_progress)
+            transcriptProgress.visibility = View.VISIBLE
+            startTranscriptionService()
+        }
+    }
+
+    private fun startTranscriptionService() {
+        val intent = Intent(this, VoskTranscriptionService::class.java).apply {
+            action = VoskTranscriptionService.ACTION_START_TRANSCRIPTION
+            putExtra(VoskTranscriptionService.EXTRA_FILE_NAME, currentFile.name)
+        }
+        startService(intent)
+    }
+
+    private val transcriptionReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            when (intent?.action) {
+                VoskTranscriptionService.ACTION_TRANSCRIPTION_COMPLETED -> {
+                    val fileName = intent.getStringExtra(VoskTranscriptionService.EXTRA_FILE_NAME)
+                    if (fileName == currentFile.name) {
+                        val text = intent.getStringExtra(VoskTranscriptionService.EXTRA_TRANSCRIPTION)
+                        transcriptText.text = text
                         transcriptProgress.visibility = View.GONE
                     }
                 }
-
-                override fun onPartialResults(partialResults: Bundle?) {}
-                override fun onEvent(eventType: Int, params: Bundle?) {}
-            })
+                VoskTranscriptionService.ACTION_TRANSCRIPTION_PARTIAL -> {
+                    val fileName = intent.getStringExtra(VoskTranscriptionService.EXTRA_FILE_NAME)
+                    if (fileName == currentFile.name) {
+                        val text = intent.getStringExtra(VoskTranscriptionService.EXTRA_TRANSCRIPTION)
+                        transcriptText.text = text
+                    }
+                }
+            }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        registerReceiver(
+            transcriptionReceiver,
+            IntentFilter().apply {
+                addAction(VoskTranscriptionService.ACTION_TRANSCRIPTION_COMPLETED)
+                addAction(VoskTranscriptionService.ACTION_TRANSCRIPTION_PARTIAL)
+            }
+        )
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(transcriptionReceiver)
     }
 
     private fun setupSearchInput() {
@@ -81,14 +205,6 @@ class RecordingDetailActivity : AppCompatActivity() {
         })
 
         searchResultsRecyclerView.layoutManager = LinearLayoutManager(this)
-    }
-
-    private fun startTranscription() {
-        transcriptProgress.visibility = View.VISIBLE
-        val recognizerIntent = android.speech.RecognizerIntent.getVoiceDetailsIntent(this)
-        recognizerIntent.putExtra(android.speech.RecognizerIntent.EXTRA_LANGUAGE, "zh-CN")
-        recognizerIntent.putExtra(android.speech.RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
-        speechRecognizer?.startListening(recognizerIntent)
     }
 
     private fun searchTranscript(query: String) {
@@ -137,7 +253,9 @@ class RecordingDetailActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        speechRecognizer?.destroy()
+        mediaPlayer?.release()
+        mediaPlayer = null
+        handler.removeCallbacks(updateSeekBar)
     }
 
     data class SearchResult(val context: String, val position: Int)
