@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.secondmemory.app.service.RecordingService
+import com.secondmemory.app.utils.SystemSettingsHelper
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var saveButton: Button
     private lateinit var settingsButton: Button
     private lateinit var recordingsButton: Button
+    private lateinit var systemSettingsHelper: SystemSettingsHelper
     private var recordingStartTime: Long = 0
     private val durationUpdateHandler = android.os.Handler(android.os.Looper.getMainLooper())
     private val durationUpdateRunnable = object : Runnable {
@@ -46,6 +48,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        systemSettingsHelper = SystemSettingsHelper(this)
+
         statusText = findViewById(R.id.statusText)
         recordingStartTimeText = findViewById(R.id.recordingStartTimeText)
         recordingDurationText = findViewById(R.id.recordingDurationText)
@@ -57,6 +61,7 @@ class MainActivity : AppCompatActivity() {
         setupButtons()
         checkPermissions()
         checkBatteryOptimization()
+        checkAutoStart()
         updateUI()
     }
 
@@ -97,15 +102,24 @@ class MainActivity : AppCompatActivity() {
                     .setTitle(R.string.battery_optimization_title)
                     .setMessage(R.string.battery_optimization_message)
                     .setPositiveButton(R.string.go_to_settings) { _, _ ->
-                        val intent = Intent(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
-                            data = android.net.Uri.parse("package:$packageName")
-                        }
-                        startActivity(intent)
+                        systemSettingsHelper.openBatteryOptimizationSettings()
                     }
                     .setNegativeButton(R.string.cancel, null)
                     .show()
             }
         }
+    }
+
+    private fun checkAutoStart() {
+        // 显示自启动设置对话框
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle(R.string.auto_start_title)
+            .setMessage(R.string.auto_start_message)
+            .setPositiveButton(R.string.go_to_settings) { _, _ ->
+                systemSettingsHelper.openAutoStartSettings()
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
     }
 
     override fun onResume() {

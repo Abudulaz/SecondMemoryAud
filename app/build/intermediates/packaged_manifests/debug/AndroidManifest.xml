@@ -9,13 +9,10 @@
         android:targetSdkVersion="34" />
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28" />
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <permission
@@ -44,23 +41,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.secondmemory.app.SettingsActivity"
-            android:label="@string/settings"
-            android:parentActivityName="com.secondmemory.app.MainActivity" />
-        <activity
-            android:name="com.secondmemory.app.RecordingsActivity"
-            android:label="@string/recordings_title"
-            android:parentActivityName="com.secondmemory.app.MainActivity" />
+        <activity android:name="com.secondmemory.app.SettingsActivity" />
+        <activity android:name="com.secondmemory.app.RecordingsActivity" />
+        <activity android:name="com.secondmemory.app.RecordingDetailActivity" />
 
         <service
             android:name="com.secondmemory.app.service.RecordingService"
-            android:enabled="true"
-            android:exported="false" />
+            android:foregroundServiceType="microphone" />
 
         <receiver
             android:name="com.secondmemory.app.receiver.BootReceiver"
-            android:enabled="true"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

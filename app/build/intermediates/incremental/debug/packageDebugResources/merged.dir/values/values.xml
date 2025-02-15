@@ -12,8 +12,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="white">#FFFFFFFF</color>
     <string name="app_name">SecondMemoryAud</string>
+    <string name="auto_start_message">为了确保录音服务能够在开机后自动运行，请允许应用自启动和后台运行。\n\n不同手机可能设置方式不同，如果无法找到设置项，请尝试在系统设置中搜索"自启动"、"后台应用"或"应用管理"。</string>
     <string name="auto_start_on_boot">开机自动启动录音</string>
-    <string name="battery_optimization_message">为了确保录音服务能够在后台正常运行，请关闭电池优化。</string>
+    <string name="auto_start_title">自启动设置</string>
+    <string name="battery_optimization_message">为了确保录音服务能够在后台正常运行，请关闭电池优化。\n\n不同手机可能设置方式不同，如果无法找到设置项，请尝试在系统设置中搜索"电池优化"或"后台运行"。</string>
     <string name="battery_optimization_title">电池优化</string>
     <string name="cancel">取消</string>
     <string name="channel_description">显示录音服务的状态</string>
@@ -39,11 +41,13 @@
     <string name="retention_period_note">注意：当存储空间不足时，旧的录音文件将被自动删除</string>
     <string name="retention_period_title">录音保留期限</string>
     <string name="save_recording">保存录音</string>
+    <string name="search_transcript">搜索文字内容…</string>
     <string name="settings">设置</string>
     <string name="start_recording">开始录音</string>
     <string name="stop_recording">停止录音</string>
     <string name="storage_info">已使用: %1$d MB\n可用空间: %2$d GB</string>
     <string name="storage_title">存储信息</string>
+    <string name="transcription_failed">语音识别失败</string>
     <style name="Theme.SecondMemoryAud" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         
         <item name="colorPrimary">@color/purple_500</item>

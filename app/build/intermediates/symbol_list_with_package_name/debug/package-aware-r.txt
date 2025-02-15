@@ -3087,6 +3087,7 @@ drawable notification_template_icon_low_bg
 drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
 drawable recording_info_background
+drawable search_results_background
 drawable test_level_drawable
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
@@ -3320,6 +3321,7 @@ id indeterminate
 id info
 id invisible
 id inward
+id is_pooling_container_tag
 id italic
 id item_touch_helper_previous_elevation
 id jumpToEnd
@@ -3413,6 +3415,7 @@ id notification_background
 id notification_main_column
 id notification_main_column_container
 id off
+id oldestRecordingText
 id on
 id onInterceptTouchReturnSwipe
 id open_search_bar_text_view
@@ -3445,6 +3448,7 @@ id peekHeight
 id percent
 id pin
 id playButton
+id pooling_container_listener_holder_tag
 id position
 id postLayout
 id pressed
@@ -3481,6 +3485,8 @@ id scrollIndicatorDown
 id scrollIndicatorUp
 id scrollView
 id scrollable
+id searchInput
+id searchResultsRecyclerView
 id search_badge
 id search_bar
 id search_button
@@ -3575,6 +3581,9 @@ id toggle
 id top
 id topPanel
 id touch_outside
+id transcriptProgress
+id transcriptScrollView
+id transcriptText
 id transitionToEnd
 id transitionToStart
 id transition_current_scene
@@ -3721,6 +3730,7 @@ layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
 layout activity_main
+layout activity_recording_detail
 layout activity_recordings
 layout activity_settings
 layout custom_dialog
@@ -3837,7 +3847,9 @@ string abc_toolbar_collapse_description
 string androidx_startup
 string app_name
 string appbar_scrolling_view_behavior
+string auto_start_message
 string auto_start_on_boot
+string auto_start_title
 string battery_optimization_message
 string battery_optimization_title
 string bottom_sheet_behavior
@@ -3995,6 +4007,7 @@ string retention_period_note
 string retention_period_title
 string save_recording
 string search_menu_title
+string search_transcript
 string searchbar_scrolling_view_behavior
 string searchview_clear_text_content_description
 string searchview_navigation_content_description
@@ -4006,6 +4019,7 @@ string status_bar_notification_info_overflow
 string stop_recording
 string storage_info
 string storage_title
+string transcription_failed
 style AlertDialog_AppCompat
 style AlertDialog_AppCompat_Light
 style Animation_AppCompat_Dialog

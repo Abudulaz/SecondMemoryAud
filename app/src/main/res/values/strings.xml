@@ -11,8 +11,10 @@
     <string name="settings">设置</string>
     <string name="permissions_required">需要录音和存储权限才能使用此应用</string>
     <string name="battery_optimization_title">电池优化</string>
-    <string name="battery_optimization_message">为了确保录音服务能够在后台正常运行，请关闭电池优化。</string>
+    <string name="battery_optimization_message">为了确保录音服务能够在后台正常运行，请关闭电池优化。\n\n不同手机可能设置方式不同，如果无法找到设置项，请尝试在系统设置中搜索"电池优化"或"后台运行"。</string>
     <string name="go_to_settings">前往设置</string>
+    <string name="auto_start_title">自启动设置</string>
+    <string name="auto_start_message">为了确保录音服务能够在开机后自动运行，请允许应用自启动和后台运行。\n\n不同手机可能设置方式不同，如果无法找到设置项，请尝试在系统设置中搜索"自启动"、"后台应用"或"应用管理"。</string>
     <string name="recording_start_time">开始时间：%s</string>
     <string name="recording_duration">已录制：%s</string>
     <string name="recording_time_limit_note">24小时后自动保存\n保留7天</string>
@@ -30,6 +32,8 @@
     <!-- RecordingsActivity -->
     <string name="recordings_title">录音列表</string>
     <string name="play_recording">播放录音</string>
+    <string name="search_transcript">搜索文字内容…</string>
+    <string name="transcription_failed">语音识别失败</string>
 
     <!-- RecordingsActivity -->
     <string name="delete">删除</string>

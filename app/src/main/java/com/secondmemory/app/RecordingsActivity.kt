@@ -117,11 +117,16 @@ class RecordingsActivity : AppCompatActivity() {
                     R.drawable.ic_play
             )
             
+            holder.itemView.setOnClickListener {
+                val intent = Intent(this@RecordingsActivity, RecordingDetailActivity::class.java)
+                intent.putExtra("fileName", file.name)
+                startActivity(intent)
+            }
+
             holder.playButton.setOnClickListener {
                 onItemClick(file, position)
             }
 
-            // 长按菜单
             holder.cardView.setOnLongClickListener {
                 showPopupMenu(it, file)
                 true
