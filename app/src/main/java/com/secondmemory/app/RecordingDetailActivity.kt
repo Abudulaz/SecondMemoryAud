@@ -14,6 +14,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.SeekBar
@@ -38,8 +39,10 @@ class RecordingDetailActivity : AppCompatActivity() {
     private lateinit var playbackSeekBar: SeekBar
     private lateinit var currentTimeText: TextView
     private lateinit var totalTimeText: TextView
+    private lateinit var retryButton: Button
     private var mediaPlayer: MediaPlayer? = null
     private var isPlaying = false
+    private var isTranscribing = false
     private val updateSeekBar = object : Runnable {
         override fun run() {
             mediaPlayer?.let { player ->
@@ -73,6 +76,7 @@ class RecordingDetailActivity : AppCompatActivity() {
 
         setupPlayer(false) // 不自动播放
         setupSearchInput()
+        setupRetryButton()
         loadTranscription()
     }
 
@@ -138,15 +142,24 @@ class RecordingDetailActivity : AppCompatActivity() {
         return String.format("%02d:%02d", minutes, seconds)
     }
 
+    private fun setupRetryButton() {
+        retryButton = findViewById(R.id.retryButton)
+        retryButton.setOnClickListener {
+            startTranscriptionService(true)
+        }
+    }
+
     private fun loadTranscription() {
         val transcription = preferencesManager.getTranscription(currentFile.name)
         if (transcription != null) {
             displayFormattedText(transcription)
             transcriptProgress.visibility = View.GONE
+            retryButton.visibility = View.VISIBLE
         } else {
             transcriptText.text = getString(R.string.transcription_in_progress)
             transcriptProgress.visibility = View.VISIBLE
-            startTranscriptionService()
+            retryButton.visibility = View.GONE
+            startTranscriptionService(false)
         }
     }
 
@@ -161,10 +174,23 @@ class RecordingDetailActivity : AppCompatActivity() {
         transcriptText.text = formattedText
     }
 
-    private fun startTranscriptionService() {
+    private fun startTranscriptionService(isRetry: Boolean) {
+        if (isTranscribing) return
+        
+        isTranscribing = true
+        transcriptProgress.visibility = View.VISIBLE
+        retryButton.visibility = View.GONE
+        
+        if (isRetry) {
+            // 清除旧的转写结果
+            preferencesManager.saveTranscription(currentFile.name, null)
+            transcriptText.text = getString(R.string.transcription_in_progress)
+        }
+        
         val intent = Intent(this, VoskTranscriptionService::class.java).apply {
             action = VoskTranscriptionService.ACTION_START_TRANSCRIPTION
             putExtra(VoskTranscriptionService.EXTRA_FILE_NAME, currentFile.name)
+            putExtra("isRetry", isRetry)
         }
         startService(intent)
     }
@@ -179,6 +205,8 @@ class RecordingDetailActivity : AppCompatActivity() {
                         if (text != null) {
                             displayFormattedText(text)
                             transcriptProgress.visibility = View.GONE
+                            retryButton.visibility = View.VISIBLE
+                            isTranscribing = false
                         }
                     }
                 }
@@ -214,7 +242,7 @@ class RecordingDetailActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         // 如果正在识别，不要等待识别完成，直接返回
-        if (transcriptProgress.visibility == View.VISIBLE) {
+        if (isTranscribing) {
             finish()
             return
         }

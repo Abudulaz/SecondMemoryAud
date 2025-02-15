@@ -3477,6 +3477,7 @@ int id recordingsRecyclerView 0x7f080179
 int id rectangles 0x7f08017a
 int id report_drawn 0x7f08017b
 int id retentionPeriodText 0x7f08017c
+int id retryButton 0x7f080213
 int id reverseSawtooth 0x7f08017d
 int id right 0x7f08017e
 int id rightToLeft 0x7f08017f
@@ -3594,6 +3595,7 @@ int id touch_outside 0x7f0801ed
 int id transcriptProgress 0x7f0801ee
 int id transcriptScrollView 0x7f0801ef
 int id transcriptText 0x7f0801f0
+int id transcriptionPreviewText 0x7f080214
 int id transitionToEnd 0x7f0801f1
 int id transitionToStart 0x7f0801f2
 int id transition_current_scene 0x7f0801f3

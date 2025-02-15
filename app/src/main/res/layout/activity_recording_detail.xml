@@ -15,6 +15,16 @@
         android:maxLines="1"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/retryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="重新识别"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchInput" />
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/transcriptScrollView"
         android:layout_width="match_parent"
@@ -22,7 +32,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/playerControls"
-        app:layout_constraintTop_toBottomOf="@+id/searchInput">
+        app:layout_constraintTop_toBottomOf="@+id/retryButton">
 
         <TextView
             android:id="@+id/transcriptText"

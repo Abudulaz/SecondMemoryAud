@@ -3478,6 +3478,7 @@ id recordingsRecyclerView
 id rectangles
 id report_drawn
 id retentionPeriodText
+id retryButton
 id reverseSawtooth
 id right
 id rightToLeft
@@ -3595,6 +3596,7 @@ id touch_outside
 id transcriptProgress
 id transcriptScrollView
 id transcriptText
+id transcriptionPreviewText
 id transitionToEnd
 id transitionToStart
 id transition_current_scene

@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.content.ContextCompat
 import com.secondmemory.app.service.RecordingService
-import com.secondmemory.app.service.TranscriptionService
+import com.secondmemory.app.service.VoskTranscriptionService
 import com.secondmemory.app.utils.PreferencesManager
 
 class BootReceiver : BroadcastReceiver() {
@@ -23,10 +23,14 @@ class BootReceiver : BroadcastReceiver() {
                 }
 
                 // 启动语音识别服务
-                val transcriptionIntent = Intent(context, TranscriptionService::class.java).apply {
-                    action = TranscriptionService.ACTION_TRANSCRIBE_ALL
+                val transcriptionIntent = Intent(context, VoskTranscriptionService::class.java).apply {
+                    action = VoskTranscriptionService.ACTION_TRANSCRIBE_ALL
                 }
-                context.startService(transcriptionIntent)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    ContextCompat.startForegroundService(context, transcriptionIntent)
+                } else {
+                    context.startService(transcriptionIntent)
+                }
             }
         }
     }

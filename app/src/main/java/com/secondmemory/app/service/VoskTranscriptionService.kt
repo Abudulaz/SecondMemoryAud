@@ -7,19 +7,29 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import android.os.Handler
-import android.os.Looper
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.IBinder
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import com.secondmemory.app.MainActivity
 import com.secondmemory.app.R
 import com.secondmemory.app.utils.AudioConverter
 import com.secondmemory.app.utils.AudioFileManager
 import com.secondmemory.app.utils.FileUtils
 import com.secondmemory.app.utils.PreferencesManager
+import kotlinx.coroutines.*
 import org.vosk.Model
 import org.vosk.Recognizer
 import org.vosk.android.StorageService
@@ -37,6 +47,13 @@ class VoskTranscriptionService : Service() {
     private var isProcessing = false
     private var mediaPlayer: MediaPlayer? = null
     private val handler = Handler(Looper.getMainLooper())
+    private val serviceScope = CoroutineScope(
+        SupervisorJob() + Dispatchers.IO + 
+        CoroutineExceptionHandler { _, throwable ->
+            Log.e(TAG, "Coroutine error", throwable)
+        }
+    )
+    private var currentJob: Job? = null
     private val autoTranscribeRunnable = object : Runnable {
         override fun run() {
             checkNewRecordings()
@@ -50,8 +67,16 @@ class VoskTranscriptionService : Service() {
         preferencesManager = PreferencesManager(this)
         createNotificationChannel()
         startForeground(NOTIFICATION_ID, createNotification("初始化语音识别服务..."))
-        initializeVosk()
-        startAutoTranscribe()
+        
+        serviceScope.launch(Dispatchers.IO) {
+            try {
+                initializeVosk()
+                startAutoTranscribe()
+            } catch (e: Exception) {
+                Log.e(TAG, "Error initializing service", e)
+                stopSelf()
+            }
+        }
     }
 
     private fun startAutoTranscribe() {
@@ -59,18 +84,24 @@ class VoskTranscriptionService : Service() {
     }
 
     private fun checkNewRecordings() {
-        val recordings = audioFileManager.getRecordingsList()
-        var hasNewRecordings = false
-        
-        recordings.forEach { file ->
-            if (!preferencesManager.hasTranscription(file.name)) {
-                transcriptionQueue.offer(file)
-                hasNewRecordings = true
+        serviceScope.launch(Dispatchers.IO) {
+            try {
+                val recordings = audioFileManager.getRecordingsList()
+                var hasNewRecordings = false
+                
+                recordings.forEach { file ->
+                    if (!preferencesManager.hasTranscription(file.name)) {
+                        transcriptionQueue.offer(file)
+                        hasNewRecordings = true
+                    }
+                }
+                
+                if (hasNewRecordings && !isProcessing) {
+                    processNextFile()
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error checking new recordings", e)
             }
-        }
-        
-        if (hasNewRecordings && !isProcessing) {
-            processNextFile()
         }
     }
 
@@ -105,20 +136,20 @@ class VoskTranscriptionService : Service() {
             .build()
     }
 
-    private fun updateNotification(text: String) {
+    private suspend fun updateNotification(text: String) = withContext(Dispatchers.Main) {
         val notification = createNotification(text)
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(NOTIFICATION_ID, notification)
     }
 
-    private fun initializeVosk() {
+    private suspend fun initializeVosk() = withContext(Dispatchers.IO) {
         try {
             val modelDir = File(filesDir, "model")
             Log.d(TAG, "Starting Vosk initialization...")
             
             // 复制模型文件到内部存储
             Log.d(TAG, "Copying model files to: ${modelDir.absolutePath}")
-            FileUtils.copyAssetToInternal(this, "vosk-model-cn", "model")
+            FileUtils.copyAssetToInternal(this@VoskTranscriptionService, "vosk-model-cn", "model")
             
             // 验证模型文件
             if (!modelDir.exists() || !modelDir.isDirectory) {
@@ -143,19 +174,7 @@ class VoskTranscriptionService : Service() {
             Log.d(TAG, "Vosk initialization completed successfully")
         } catch (e: Exception) {
             Log.e(TAG, "Error initializing Vosk", e)
-            throw e  // 重新抛出异常以便上层处理
-        }
-    }
-
-    private fun queuePendingRecordings() {
-        val recordings = audioFileManager.getRecordingsList()
-        recordings.forEach { file ->
-            if (!preferencesManager.hasTranscription(file.name)) {
-                transcriptionQueue.offer(file)
-            }
-        }
-        if (!isProcessing) {
-            processNextFile()
+            throw e
         }
     }
 
@@ -168,217 +187,119 @@ class VoskTranscriptionService : Service() {
         }
 
         isProcessing = true
-        transcribeFile(file)
+        currentJob = serviceScope.launch(Dispatchers.IO) {
+            try {
+                transcribeFile(file)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error transcribing file", e)
+                withContext(Dispatchers.Main) {
+                    LocalBroadcastManager.getInstance(this@VoskTranscriptionService)
+                        .sendBroadcast(Intent(ACTION_TRANSCRIPTION_COMPLETED).apply {
+                            putExtra(EXTRA_FILE_NAME, file.name)
+                            putExtra(EXTRA_TRANSCRIPTION, "语音识别失败: ${e.message}")
+                        })
+                }
+            } finally {
+                delay(1000) // 添加延迟以避免过快处理下一个文件
+                processNextFile()
+            }
+        }
     }
 
-    private fun transcribeFile(file: File) {
+    private suspend fun transcribeFile(file: File) = withContext(Dispatchers.IO) {
         var wavFile: File? = null
         try {
             updateNotification("正在识别: ${file.name}")
             if (!file.exists()) {
-                val error = "Input file does not exist: ${file.absolutePath}"
-                Log.e(TAG, error)
-                throw IOException(error)
+                throw IOException("Input file does not exist: ${file.absolutePath}")
             }
-            Log.d(TAG, "Starting transcription for file: ${file.name} (size: ${file.length()} bytes)")
             
             updateNotification("正在转换音频格式: ${file.name}")
-            Log.d(TAG, "Converting audio file to WAV format...")
             wavFile = File(cacheDir, "${file.nameWithoutExtension}.wav")
-            try {
-                Log.d(TAG, "Starting audio conversion for file: ${file.absolutePath}")
-                Log.d(TAG, "Input file size: ${file.length()} bytes")
-                Log.d(TAG, "Input file format: ${file.extension}")
-                
-                AudioConverter.convertToWav(file, wavFile)
-                
-                if (!wavFile.exists()) {
-                    val error = "WAV conversion failed - output file not created"
-                    Log.e(TAG, error)
-                    throw IOException(error)
-                }
-                
-                if (wavFile.length() == 0L) {
-                    val error = "WAV conversion failed - output file is empty"
-                    Log.e(TAG, error)
-                    throw IOException(error)
-                }
-                
-                Log.d(TAG, "Audio conversion completed successfully")
-                Log.d(TAG, "WAV file size: ${wavFile.length()} bytes")
-                Log.d(TAG, "WAV file path: ${wavFile.absolutePath}")
-            } catch (e: Exception) {
-                val error = "Error converting audio to WAV: ${e.message}"
-                Log.e(TAG, error, e)
-                throw IOException(error, e)
+            AudioConverter.convertToWav(file, wavFile)
+            
+            if (!wavFile.exists() || wavFile.length() == 0L) {
+                throw IOException("WAV conversion failed")
             }
             
             // 验证识别器状态
             if (recognizer == null) {
-                Log.e(TAG, "Recognizer is null - attempting to reinitialize Vosk")
-                try {
-                    initializeVosk()
-                } catch (e: Exception) {
-                    val error = "Failed to reinitialize Vosk: ${e.message}"
-                    Log.e(TAG, error, e)
-                    throw IllegalStateException(error, e)
-                }
-                
-                if (recognizer == null) {
-                    val error = "Failed to initialize recognizer after reinitialization attempt"
-                    Log.e(TAG, error)
-                    throw IllegalStateException(error)
-                }
-                
-                Log.d(TAG, "Vosk reinitialization successful")
+                initializeVosk()
             }
-            
-            // 验证模型文件
-            val modelDir = File(filesDir, "model")
-            if (!modelDir.exists() || !modelDir.isDirectory) {
-                val error = "Model directory not found or invalid: ${modelDir.absolutePath}"
-                Log.e(TAG, error)
-                throw IllegalStateException(error)
-            }
-            
-            val modelFiles = modelDir.list()
-            if (modelFiles.isNullOrEmpty()) {
-                val error = "No model files found in directory: ${modelDir.absolutePath}"
-                Log.e(TAG, error)
-                throw IllegalStateException(error)
-            }
-            
-            Log.d(TAG, "Model verification successful. Found ${modelFiles.size} files")
             
             // 读取WAV文件
             updateNotification("正在识别文件: ${file.name}")
-            Log.d(TAG, "Starting recognition process...")
             val audioData = ByteArray(4096)
             var partialResult = StringBuilder()
-            var totalBytesProcessed = 0
             var hasRecognizedSomething = false
             
-            FileInputStream(wavFile!!).use { input ->
+            FileInputStream(wavFile).use { input ->
                 var bytesRead: Int
                 while (input.read(audioData).also { bytesRead = it } != -1) {
-                    totalBytesProcessed += bytesRead
-                    Log.d(TAG, "Processing audio chunk: $bytesRead bytes (Total: $totalBytesProcessed bytes)")
+                    ensureActive() // 检查协程是否被取消
                     
                     val accepted = recognizer?.acceptWaveForm(audioData, bytesRead) ?: false
-                    Log.d(TAG, "Chunk processed, accepted: $accepted")
                     if (accepted) {
                         val result = JSONObject(recognizer?.getResult() ?: "{}")
                         val text = result.optString("text", "")
-                        Log.d(TAG, "Got recognition result: $text")
                         if (text.isNotEmpty()) {
                             hasRecognizedSomething = true
-                            Log.d(TAG, "Adding to partial result: $text")
                             partialResult.append(text).append(" ")
-            // 发送部分识别结果
-            LocalBroadcastManager.getInstance(this).sendBroadcast(
-                Intent(ACTION_TRANSCRIPTION_PARTIAL).apply {
-                    putExtra(EXTRA_FILE_NAME, file.name)
-                    putExtra(EXTRA_TRANSCRIPTION, partialResult.toString().trim())
-                }
-            )
-                        }
-                    } else {
-                        val partial = JSONObject(recognizer?.getPartialResult() ?: "{}")
-                        val text = partial.optString("partial", "")
-                        Log.d(TAG, "Got partial result: $text")
-                        if (text.isNotEmpty()) {
-                            Log.d(TAG, "Broadcasting partial result")
-            // 发送部分识别结果
-            LocalBroadcastManager.getInstance(this).sendBroadcast(
-                Intent(ACTION_TRANSCRIPTION_PARTIAL).apply {
-                    putExtra(EXTRA_FILE_NAME, file.name)
-                    putExtra(EXTRA_TRANSCRIPTION, text)
-                }
-            )
+                            withContext(Dispatchers.Main) {
+                                LocalBroadcastManager.getInstance(this@VoskTranscriptionService)
+                                    .sendBroadcast(Intent(ACTION_TRANSCRIPTION_PARTIAL).apply {
+                                        putExtra(EXTRA_FILE_NAME, file.name)
+                                        putExtra(EXTRA_TRANSCRIPTION, partialResult.toString().trim())
+                                    })
+                            }
                         }
                     }
                 }
                 
-                Log.d(TAG, "Recognition process completed")
                 val finalResult = JSONObject(recognizer?.getFinalResult() ?: "{}")
                 val finalText = finalResult.optString("text", "")
-                Log.d(TAG, "Final recognition result: $finalText")
                 
                 if (!hasRecognizedSomething && finalText.isEmpty()) {
-                    val error = "No speech recognized in the audio file"
-                    Log.e(TAG, error)
-                    throw IllegalStateException(error)
+                    throw IllegalStateException("No speech recognized in the audio file")
                 }
                 
-                if (finalText.isNotEmpty()) {
-                    Log.d(TAG, "Saving final transcription")
-                    saveTranscription(file, finalText)
-                } else if (partialResult.isNotEmpty()) {
-                    // If no final result but we have partial results, use those
-                    val text = partialResult.toString().trim()
-                    Log.d(TAG, "Using accumulated partial results as final transcription")
-                    saveTranscription(file, text)
-                }
+                val text = if (finalText.isNotEmpty()) finalText else partialResult.toString().trim()
+                saveTranscription(file, text)
             }
-            
-        } catch (e: Exception) {
-            Log.e(TAG, "Error transcribing file: ${file.name}", e)
-            // Notify UI about the error
-            sendBroadcast(Intent(ACTION_TRANSCRIPTION_COMPLETED).apply {
-                putExtra(EXTRA_FILE_NAME, file.name)
-                putExtra(EXTRA_TRANSCRIPTION, "语音识别失败: ${e.message}")
-            })
         } finally {
-            try {
-                // Clean up temporary WAV file
-                if (wavFile?.exists() == true) {
-                    Log.d(TAG, "Cleaning up temporary WAV file")
-                    wavFile.delete()
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "Error cleaning up WAV file", e)
-            }
-            processNextFile()
+            wavFile?.delete()
         }
     }
 
-    private fun saveTranscription(file: File, text: String) {
-        Log.d(TAG, "Saving transcription for file: ${file.name}")
-        // 对文本进行后处理，改进格式和准确性
+    private suspend fun saveTranscription(file: File, text: String) = withContext(Dispatchers.Default) {
         val processedText = processTranscriptionText(text)
         preferencesManager.saveTranscription(file.name, processedText)
-        LocalBroadcastManager.getInstance(this).sendBroadcast(
-            Intent(ACTION_TRANSCRIPTION_COMPLETED).apply {
-                putExtra(EXTRA_FILE_NAME, file.name)
-                putExtra(EXTRA_TRANSCRIPTION, processedText)
-            }
-        )
+        withContext(Dispatchers.Main) {
+            LocalBroadcastManager.getInstance(this@VoskTranscriptionService)
+                .sendBroadcast(Intent(ACTION_TRANSCRIPTION_COMPLETED).apply {
+                    putExtra(EXTRA_FILE_NAME, file.name)
+                    putExtra(EXTRA_TRANSCRIPTION, processedText)
+                })
+        }
     }
 
     private fun processTranscriptionText(text: String): String {
-        // 1. 移除重复的词语
-        var processed = removeDuplicateWords(text)
+        val words = text.split(" ")
+        val deduplicatedText = words.filterIndexed { index, word -> 
+            index == 0 || word != words[index - 1]
+        }.joinToString(" ")
         
-        // 2. 根据标点符号分割成句子
-        val sentences = processed.split(Regex("[。？！]"))
+        val sentences = deduplicatedText.split(Regex("[。？！]"))
             .filter { it.isNotBlank() }
             .map { it.trim() }
         
-        // 3. 重新组合文本，确保每句话都有合适的标点符号
         return sentences.joinToString("。\n") { 
             if (it.endsWith("？") || it.endsWith("！")) it else "$it。"
         }
     }
 
-    private fun removeDuplicateWords(text: String): String {
-        val words = text.split(" ")
-        return words.filterIndexed { index, word -> 
-            index == 0 || word != words[index - 1]
-        }.joinToString(" ")
-    }
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d(TAG, "onStartCommand: ${intent?.action}")
+        super.onStartCommand(intent, flags, startId)
         when (intent?.action) {
             ACTION_START_TRANSCRIPTION -> {
                 val fileName = intent.getStringExtra(EXTRA_FILE_NAME)
@@ -391,7 +312,19 @@ class VoskTranscriptionService : Service() {
                     }
                 }
             }
-            ACTION_TRANSCRIBE_ALL -> queuePendingRecordings()
+            ACTION_TRANSCRIBE_ALL -> {
+                serviceScope.launch(Dispatchers.IO) {
+                    val recordings = audioFileManager.getRecordingsList()
+                    recordings.forEach { file ->
+                        if (!preferencesManager.hasTranscription(file.name)) {
+                            transcriptionQueue.offer(file)
+                        }
+                    }
+                    if (!isProcessing) {
+                        processNextFile()
+                    }
+                }
+            }
         }
         return START_STICKY
     }
@@ -399,13 +332,17 @@ class VoskTranscriptionService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(autoTranscribeRunnable)
+        currentJob?.cancel()
+        serviceScope.cancel()
         recognizer?.close()
         mediaPlayer?.release()
         mediaPlayer = null
         stopForeground(true)
     }
 
-    override fun onBind(intent: Intent?): IBinder? = null
+    override fun onBind(intent: Intent): IBinder? {
+        return null
+    }
 
     companion object {
         private const val TAG = "VoskTranscriptionService"

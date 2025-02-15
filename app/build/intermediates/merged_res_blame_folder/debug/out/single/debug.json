@@ -4,6 +4,10 @@
         "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\drawable\\player_controls_background.xml"
     },
     {
+        "merged": "com.secondmemory.app-merged_res-34:/layout_item_recording.xml.flat",
+        "source": "com.secondmemory.app-main-36:/layout/item_recording.xml"
+    },
+    {
         "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\drawable_recording_info_background.xml.flat",
         "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\drawable\\recording_info_background.xml"
     },
@@ -16,6 +20,10 @@
         "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
     },
     {
+        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\layout_item_search_result.xml.flat",
+        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\layout\\item_search_result.xml"
+    },
+    {
         "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\layout_activity_recording_detail.xml.flat",
         "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\layout\\activity_recording_detail.xml"
     },
@@ -24,16 +32,16 @@
         "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\drawable\\ic_play.xml"
     },
     {
-        "merged": "com.secondmemory.app-merged_res-34:/layout_item_search_result.xml.flat",
-        "source": "com.secondmemory.app-main-36:/layout/item_search_result.xml"
-    },
-    {
-        "merged": "com.secondmemory.app-merged_res-34:/layout_activity_recordings.xml.flat",
-        "source": "com.secondmemory.app-main-36:/layout/activity_recordings.xml"
+        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\drawable_search_background.xml.flat",
+        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\drawable\\search_background.xml"
     },
     {
         "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\layout_activity_main.xml.flat",
         "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "com.secondmemory.app-merged_res-34:/layout_activity_recording_detail.xml.flat",
+        "source": "com.secondmemory.app-main-36:/layout/activity_recording_detail.xml"
     },
     {
         "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\layout_activity_recordings.xml.flat",
@@ -46,10 +54,6 @@
     {
         "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\menu_recording_item_menu.xml.flat",
         "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\menu\\recording_item_menu.xml"
-    },
-    {
-        "merged": "com.secondmemory.app-merged_res-34:/drawable_search_background.xml.flat",
-        "source": "com.secondmemory.app-main-36:/drawable/search_background.xml"
     },
     {
         "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\drawable_search_results_background.xml.flat",

@@ -41,6 +41,7 @@ id recordingStatus
 id recordingsButton
 id recordingsRecyclerView
 id retentionPeriodText
+id retryButton
 id searchInput
 id searchResultsRecyclerView
 id searchView
@@ -52,6 +53,7 @@ id totalTimeText
 id transcriptProgress
 id transcriptScrollView
 id transcriptText
+id transcriptionPreviewText
 layout activity_main
 layout activity_recording_detail
 layout activity_recordings

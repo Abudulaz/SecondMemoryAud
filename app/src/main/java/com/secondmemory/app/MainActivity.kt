@@ -2,11 +2,13 @@ package com.secondmemory.app
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.secondmemory.app.service.RecordingService
 import com.secondmemory.app.service.VoskTranscriptionService
 import com.secondmemory.app.utils.FileUtils
@@ -91,16 +93,21 @@ class MainActivity : AppCompatActivity() {
 
     private fun startRecording() {
         val intent = Intent(this, RecordingService::class.java)
-        startService(intent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent)
+        } else {
+            startService(intent)
+        }
         updateUI(true)
     }
 
     private fun stopRecording() {
         val intent = Intent(this, RecordingService::class.java)
         stopService(intent)
-        // 停止录音时自动保存
+        // 停止录音时自动保存并开始识别
         val saveIntent = Intent(RecordingService.ACTION_SAVE_RECORDING)
         sendBroadcast(saveIntent)
+        startTranscriptionService()
         updateUI(false)
     }
 
@@ -120,7 +127,11 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, VoskTranscriptionService::class.java).apply {
             action = VoskTranscriptionService.ACTION_TRANSCRIBE_ALL
         }
-        startService(intent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent)
+        } else {
+            startService(intent)
+        }
     }
 
     override fun onResume() {

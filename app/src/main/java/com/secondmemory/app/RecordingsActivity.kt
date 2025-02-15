@@ -1,8 +1,13 @@
 package com.secondmemory.app
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +15,16 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.lifecycleScope
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.secondmemory.app.utils.PreferencesManager
-import com.secondmemory.app.service.TranscriptionService
+import com.secondmemory.app.service.VoskTranscriptionService
 import com.secondmemory.app.utils.AudioFileManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -28,6 +38,7 @@ class RecordingsActivity : AppCompatActivity() {
     private var mediaPlayer: MediaPlayer? = null
     private var currentPlayingPosition: Int = -1
     private var recordings: List<File> = emptyList()
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,9 +57,14 @@ class RecordingsActivity : AppCompatActivity() {
         setupSearchView()
         
         // 启动后台转写服务
-        startService(Intent(this, TranscriptionService::class.java).apply {
-            action = TranscriptionService.ACTION_TRANSCRIBE_ALL
-        })
+        val intent = Intent(this, VoskTranscriptionService::class.java).apply {
+            action = VoskTranscriptionService.ACTION_TRANSCRIBE_ALL
+        }
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            startForegroundService(intent)
+        } else {
+            startService(intent)
+        }
         
         updateRecordingsList()
     }
@@ -75,46 +91,53 @@ class RecordingsActivity : AppCompatActivity() {
     }
 
     private fun performSearch(query: String) {
-        val searchResults = mutableListOf<SearchResult>()
-        
-        recordings.forEach { file ->
-            val transcription = preferencesManager.getTranscription(file.name)
-            if (transcription != null && transcription.contains(query, ignoreCase = true)) {
-                // 找到匹配的文本位置
-                var lastIndex = 0
-                while (true) {
-                    val index = transcription.indexOf(query, lastIndex, ignoreCase = true)
-                    if (index == -1) break
-                    
-                    // 获取上下文（前后各50个字符）
-                    val start = (index - 50).coerceAtLeast(0)
-                    val end = (index + query.length + 50).coerceAtMost(transcription.length)
-                    val context = transcription.substring(start, end)
-                    
-                    searchResults.add(SearchResult(file, context, index))
-                    lastIndex = index + 1
+        lifecycleScope.launch(Dispatchers.IO) {
+            val searchResults = mutableListOf<SearchResult>()
+            
+            recordings.forEach { file ->
+                val transcription = preferencesManager.getTranscription(file.name)
+                if (transcription != null && transcription.contains(query, ignoreCase = true)) {
+                    var lastIndex = 0
+                    while (true) {
+                        val index = transcription.indexOf(query, lastIndex, ignoreCase = true)
+                        if (index == -1) break
+                        
+                        val start = (index - 50).coerceAtLeast(0)
+                        val end = (index + query.length + 50).coerceAtMost(transcription.length)
+                        val context = transcription.substring(start, end)
+                        
+                        searchResults.add(SearchResult(file, context, index))
+                        lastIndex = index + 1
+                    }
                 }
             }
-        }
-        
-        if (searchResults.isNotEmpty()) {
-            searchResultsRecyclerView.visibility = View.VISIBLE
-            recyclerView.visibility = View.GONE
-            searchResultsRecyclerView.adapter = SearchResultsAdapter(searchResults) { result ->
-                val intent = Intent(this, RecordingDetailActivity::class.java)
-                intent.putExtra("fileName", result.file.name)
-                startActivity(intent)
+            
+            withContext(Dispatchers.Main) {
+                if (searchResults.isNotEmpty()) {
+                    searchResultsRecyclerView.visibility = View.VISIBLE
+                    recyclerView.visibility = View.GONE
+                    searchResultsRecyclerView.adapter = SearchResultsAdapter(searchResults) { result ->
+                        val intent = Intent(this@RecordingsActivity, RecordingDetailActivity::class.java)
+                        intent.putExtra("fileName", result.file.name)
+                        startActivity(intent)
+                    }
+                } else {
+                    searchResultsRecyclerView.visibility = View.GONE
+                    recyclerView.visibility = View.VISIBLE
+                }
             }
-        } else {
-            searchResultsRecyclerView.visibility = View.GONE
-            recyclerView.visibility = View.VISIBLE
         }
     }
 
     private fun updateRecordingsList() {
-        recordings = audioFileManager.getRecordingsList()
-        recyclerView.adapter = RecordingsAdapter(recordings) { file, position ->
-            playRecording(file, position)
+        lifecycleScope.launch(Dispatchers.IO) {
+            val newRecordings = audioFileManager.getRecordingsList()
+            withContext(Dispatchers.Main) {
+                recordings = newRecordings
+                recyclerView.adapter = RecordingsAdapter(recordings) { file, position ->
+                    playRecording(file, position)
+                }
+            }
         }
     }
 
@@ -152,12 +175,10 @@ class RecordingsActivity : AppCompatActivity() {
 
     private fun playRecording(file: File, position: Int) {
         if (currentPlayingPosition == position) {
-            // 点击当前正在播放的录音，停止播放
             stopPlayback()
             return
         }
 
-        // 停止当前播放的录音
         stopPlayback()
 
         try {
@@ -170,7 +191,7 @@ class RecordingsActivity : AppCompatActivity() {
                 start()
             }
             currentPlayingPosition = position
-            (recyclerView.adapter as RecordingsAdapter).notifyDataSetChanged()
+            recyclerView.adapter?.notifyDataSetChanged()
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -192,6 +213,7 @@ class RecordingsActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         stopPlayback()
+        handler.removeCallbacksAndMessages(null)
     }
 
     inner class RecordingsAdapter(
@@ -202,6 +224,7 @@ class RecordingsActivity : AppCompatActivity() {
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val nameText: TextView = view.findViewById(R.id.recordingNameText)
             val dateText: TextView = view.findViewById(R.id.recordingDateText)
+            val transcriptionPreviewText: TextView = view.findViewById(R.id.transcriptionPreviewText)
             val playButton: ImageButton = view.findViewById(R.id.playButton)
             val cardView: androidx.cardview.widget.CardView = view as androidx.cardview.widget.CardView
         }
@@ -218,6 +241,24 @@ class RecordingsActivity : AppCompatActivity() {
             
             holder.nameText.text = file.name
             holder.dateText.text = dateFormat.format(Date(file.lastModified()))
+            
+            // 异步加载文字简述
+            holder.transcriptionPreviewText.text = "正在加载..."
+            holder.transcriptionPreviewText.visibility = View.VISIBLE
+            
+            lifecycleScope.launch(Dispatchers.IO) {
+                val transcription = preferencesManager.getTranscription(file.name)
+                withContext(Dispatchers.Main) {
+                    if (holder.adapterPosition == position) {  // 确保位置没有改变
+                        if (transcription != null) {
+                            val preview = transcription.take(50) + if (transcription.length > 50) "..." else ""
+                            holder.transcriptionPreviewText.text = preview
+                        } else {
+                            holder.transcriptionPreviewText.text = "正在识别中..."
+                        }
+                    }
+                }
+            }
             
             // 更新播放按钮状态
             holder.playButton.setImageResource(
@@ -321,5 +362,28 @@ class RecordingsActivity : AppCompatActivity() {
             }
         }
         currentExportingFile = null
+    }
+
+    private val transcriptionReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            when (intent?.action) {
+                VoskTranscriptionService.ACTION_TRANSCRIPTION_COMPLETED -> {
+                    recyclerView.adapter?.notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+            transcriptionReceiver,
+            IntentFilter(VoskTranscriptionService.ACTION_TRANSCRIPTION_COMPLETED)
+        )
+    }
+
+    override fun onStop() {
+        super.onStop()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(transcriptionReceiver)
     }
 }

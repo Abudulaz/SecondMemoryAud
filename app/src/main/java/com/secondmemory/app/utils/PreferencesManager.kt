@@ -23,7 +23,7 @@ class PreferencesManager(context: Context) {
         return sharedPreferences.getBoolean(KEY_AUTO_START, false)
     }
 
-    fun saveTranscription(fileName: String, text: String) {
+    fun saveTranscription(fileName: String, text: String?) {
         sharedPreferences.edit().putString(KEY_TRANSCRIPTION_PREFIX + fileName, text).apply()
     }
 
