@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
@@ -140,13 +141,24 @@ class RecordingDetailActivity : AppCompatActivity() {
     private fun loadTranscription() {
         val transcription = preferencesManager.getTranscription(currentFile.name)
         if (transcription != null) {
-            transcriptText.text = transcription
+            displayFormattedText(transcription)
             transcriptProgress.visibility = View.GONE
         } else {
             transcriptText.text = getString(R.string.transcription_in_progress)
             transcriptProgress.visibility = View.VISIBLE
             startTranscriptionService()
         }
+    }
+
+    private fun displayFormattedText(text: String) {
+        // 按句号、问号、感叹号分割文本
+        val sentences = text.split(Regex("[。？！]"))
+            .filter { it.isNotBlank() }
+            .map { it.trim() }
+        
+        // 重新组合文本，每句话后加换行
+        val formattedText = sentences.joinToString("\n") { "$it。" }
+        transcriptText.text = formattedText
     }
 
     private fun startTranscriptionService() {
@@ -164,15 +176,19 @@ class RecordingDetailActivity : AppCompatActivity() {
                     val fileName = intent.getStringExtra(VoskTranscriptionService.EXTRA_FILE_NAME)
                     if (fileName == currentFile.name) {
                         val text = intent.getStringExtra(VoskTranscriptionService.EXTRA_TRANSCRIPTION)
-                        transcriptText.text = text
-                        transcriptProgress.visibility = View.GONE
+                        if (text != null) {
+                            displayFormattedText(text)
+                            transcriptProgress.visibility = View.GONE
+                        }
                     }
                 }
                 VoskTranscriptionService.ACTION_TRANSCRIPTION_PARTIAL -> {
                     val fileName = intent.getStringExtra(VoskTranscriptionService.EXTRA_FILE_NAME)
                     if (fileName == currentFile.name) {
                         val text = intent.getStringExtra(VoskTranscriptionService.EXTRA_TRANSCRIPTION)
-                        transcriptText.text = text
+                        if (text != null) {
+                            displayFormattedText(text)
+                        }
                     }
                 }
             }
@@ -181,7 +197,8 @@ class RecordingDetailActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        registerReceiver(
+        // 使用LocalBroadcastManager来避免系统广播可能导致的性能问题
+        LocalBroadcastManager.getInstance(this).registerReceiver(
             transcriptionReceiver,
             IntentFilter().apply {
                 addAction(VoskTranscriptionService.ACTION_TRANSCRIPTION_COMPLETED)
@@ -192,7 +209,16 @@ class RecordingDetailActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        unregisterReceiver(transcriptionReceiver)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(transcriptionReceiver)
+    }
+
+    override fun onBackPressed() {
+        // 如果正在识别，不要等待识别完成，直接返回
+        if (transcriptProgress.visibility == View.VISIBLE) {
+            finish()
+            return
+        }
+        super.onBackPressed()
     }
 
     private fun setupSearchInput() {

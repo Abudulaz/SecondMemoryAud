@@ -19,12 +19,15 @@ drawable ic_stop
 drawable ic_transcribe
 drawable player_controls_background
 drawable recording_info_background
+drawable search_background
 drawable search_results_background
 id action_delete
 id action_export
 id autoStartSwitch
+id contextText
 id currentTimeText
 id emptyText
+id fileNameText
 id markdownView
 id oldestRecordingText
 id playButton
@@ -40,6 +43,7 @@ id recordingsRecyclerView
 id retentionPeriodText
 id searchInput
 id searchResultsRecyclerView
+id searchView
 id settingsButton
 id startRecordingButton
 id storageInfoText
@@ -53,6 +57,7 @@ layout activity_recording_detail
 layout activity_recordings
 layout activity_settings
 layout item_recording
+layout item_search_result
 menu recording_item_menu
 mipmap ic_launcher
 mipmap ic_launcher_round

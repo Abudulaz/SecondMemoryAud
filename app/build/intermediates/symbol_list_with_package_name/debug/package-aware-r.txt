@@ -3090,6 +3090,7 @@ drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
 drawable player_controls_background
 drawable recording_info_background
+drawable search_background
 drawable search_results_background
 drawable test_level_drawable
 drawable tooltip_frame_dark
@@ -3224,6 +3225,7 @@ id constraint
 id container
 id content
 id contentPanel
+id contextText
 id contiguous
 id continuousVelocity
 id coordinator
@@ -3282,6 +3284,7 @@ id exitUntilCollapsed
 id expand_activities_button
 id expanded_menu
 id fade
+id fileNameText
 id fill
 id fill_horizontal
 id fill_vertical
@@ -3494,6 +3497,7 @@ id scrollView
 id scrollable
 id searchInput
 id searchResultsRecyclerView
+id searchView
 id search_badge
 id search_bar
 id search_button
@@ -3759,6 +3763,7 @@ layout design_text_input_start_icon
 layout ime_base_split_test_activity
 layout ime_secondary_split_test_activity
 layout item_recording
+layout item_search_result
 layout m3_alert_dialog
 layout m3_alert_dialog_actions
 layout m3_alert_dialog_title

@@ -6,6 +6,9 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import android.os.Handler
+import android.os.Looper
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.IBinder
@@ -33,6 +36,13 @@ class VoskTranscriptionService : Service() {
     private val transcriptionQueue = ConcurrentLinkedQueue<File>()
     private var isProcessing = false
     private var mediaPlayer: MediaPlayer? = null
+    private val handler = Handler(Looper.getMainLooper())
+    private val autoTranscribeRunnable = object : Runnable {
+        override fun run() {
+            checkNewRecordings()
+            handler.postDelayed(this, AUTO_CHECK_INTERVAL)
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -41,6 +51,27 @@ class VoskTranscriptionService : Service() {
         createNotificationChannel()
         startForeground(NOTIFICATION_ID, createNotification("初始化语音识别服务..."))
         initializeVosk()
+        startAutoTranscribe()
+    }
+
+    private fun startAutoTranscribe() {
+        handler.post(autoTranscribeRunnable)
+    }
+
+    private fun checkNewRecordings() {
+        val recordings = audioFileManager.getRecordingsList()
+        var hasNewRecordings = false
+        
+        recordings.forEach { file ->
+            if (!preferencesManager.hasTranscription(file.name)) {
+                transcriptionQueue.offer(file)
+                hasNewRecordings = true
+            }
+        }
+        
+        if (hasNewRecordings && !isProcessing) {
+            processNextFile()
+        }
     }
 
     private fun createNotificationChannel() {
@@ -243,11 +274,13 @@ class VoskTranscriptionService : Service() {
                             hasRecognizedSomething = true
                             Log.d(TAG, "Adding to partial result: $text")
                             partialResult.append(text).append(" ")
-                            // 发送部分识别结果
-                            sendBroadcast(Intent(ACTION_TRANSCRIPTION_PARTIAL).apply {
-                                putExtra(EXTRA_FILE_NAME, file.name)
-                                putExtra(EXTRA_TRANSCRIPTION, partialResult.toString().trim())
-                            })
+            // 发送部分识别结果
+            LocalBroadcastManager.getInstance(this).sendBroadcast(
+                Intent(ACTION_TRANSCRIPTION_PARTIAL).apply {
+                    putExtra(EXTRA_FILE_NAME, file.name)
+                    putExtra(EXTRA_TRANSCRIPTION, partialResult.toString().trim())
+                }
+            )
                         }
                     } else {
                         val partial = JSONObject(recognizer?.getPartialResult() ?: "{}")
@@ -255,11 +288,13 @@ class VoskTranscriptionService : Service() {
                         Log.d(TAG, "Got partial result: $text")
                         if (text.isNotEmpty()) {
                             Log.d(TAG, "Broadcasting partial result")
-                            // 发送部分识别结果
-                            sendBroadcast(Intent(ACTION_TRANSCRIPTION_PARTIAL).apply {
-                                putExtra(EXTRA_FILE_NAME, file.name)
-                                putExtra(EXTRA_TRANSCRIPTION, text)
-                            })
+            // 发送部分识别结果
+            LocalBroadcastManager.getInstance(this).sendBroadcast(
+                Intent(ACTION_TRANSCRIPTION_PARTIAL).apply {
+                    putExtra(EXTRA_FILE_NAME, file.name)
+                    putExtra(EXTRA_TRANSCRIPTION, text)
+                }
+            )
                         }
                     }
                 }
@@ -309,11 +344,37 @@ class VoskTranscriptionService : Service() {
 
     private fun saveTranscription(file: File, text: String) {
         Log.d(TAG, "Saving transcription for file: ${file.name}")
-        preferencesManager.saveTranscription(file.name, text)
-        sendBroadcast(Intent(ACTION_TRANSCRIPTION_COMPLETED).apply {
-            putExtra(EXTRA_FILE_NAME, file.name)
-            putExtra(EXTRA_TRANSCRIPTION, text)
-        })
+        // 对文本进行后处理，改进格式和准确性
+        val processedText = processTranscriptionText(text)
+        preferencesManager.saveTranscription(file.name, processedText)
+        LocalBroadcastManager.getInstance(this).sendBroadcast(
+            Intent(ACTION_TRANSCRIPTION_COMPLETED).apply {
+                putExtra(EXTRA_FILE_NAME, file.name)
+                putExtra(EXTRA_TRANSCRIPTION, processedText)
+            }
+        )
+    }
+
+    private fun processTranscriptionText(text: String): String {
+        // 1. 移除重复的词语
+        var processed = removeDuplicateWords(text)
+        
+        // 2. 根据标点符号分割成句子
+        val sentences = processed.split(Regex("[。？！]"))
+            .filter { it.isNotBlank() }
+            .map { it.trim() }
+        
+        // 3. 重新组合文本，确保每句话都有合适的标点符号
+        return sentences.joinToString("。\n") { 
+            if (it.endsWith("？") || it.endsWith("！")) it else "$it。"
+        }
+    }
+
+    private fun removeDuplicateWords(text: String): String {
+        val words = text.split(" ")
+        return words.filterIndexed { index, word -> 
+            index == 0 || word != words[index - 1]
+        }.joinToString(" ")
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -337,6 +398,7 @@ class VoskTranscriptionService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        handler.removeCallbacks(autoTranscribeRunnable)
         recognizer?.close()
         mediaPlayer?.release()
         mediaPlayer = null
@@ -347,6 +409,7 @@ class VoskTranscriptionService : Service() {
 
     companion object {
         private const val TAG = "VoskTranscriptionService"
+        private const val AUTO_CHECK_INTERVAL = 60000L // 每分钟检查一次新录音
         private const val CHANNEL_ID = "transcription_service"
         private const val NOTIFICATION_ID = 1
         const val ACTION_START_TRANSCRIPTION = "com.secondmemory.app.START_TRANSCRIPTION"

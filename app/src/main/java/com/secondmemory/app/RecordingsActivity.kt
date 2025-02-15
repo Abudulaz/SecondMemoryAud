@@ -9,8 +9,10 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.secondmemory.app.utils.PreferencesManager
 import com.secondmemory.app.service.TranscriptionService
 import com.secondmemory.app.utils.AudioFileManager
 import java.io.File
@@ -19,17 +21,29 @@ import java.util.*
 
 class RecordingsActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
+    private lateinit var searchResultsRecyclerView: RecyclerView
+    private lateinit var searchView: SearchView
     private lateinit var audioFileManager: AudioFileManager
+    private lateinit var preferencesManager: PreferencesManager
     private var mediaPlayer: MediaPlayer? = null
     private var currentPlayingPosition: Int = -1
+    private var recordings: List<File> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recordings)
 
         audioFileManager = AudioFileManager(this)
+        preferencesManager = PreferencesManager(this)
+        
         recyclerView = findViewById(R.id.recordingsRecyclerView)
+        searchResultsRecyclerView = findViewById(R.id.searchResultsRecyclerView)
+        searchView = findViewById(R.id.searchView)
+        
         recyclerView.layoutManager = LinearLayoutManager(this)
+        searchResultsRecyclerView.layoutManager = LinearLayoutManager(this)
+        
+        setupSearchView()
         
         // 启动后台转写服务
         startService(Intent(this, TranscriptionService::class.java).apply {
@@ -39,11 +53,101 @@ class RecordingsActivity : AppCompatActivity() {
         updateRecordingsList()
     }
 
+    private fun setupSearchView() {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (!query.isNullOrBlank()) {
+                    performSearch(query)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText.isNullOrBlank()) {
+                    searchResultsRecyclerView.visibility = View.GONE
+                    recyclerView.visibility = View.VISIBLE
+                } else {
+                    performSearch(newText)
+                }
+                return true
+            }
+        })
+    }
+
+    private fun performSearch(query: String) {
+        val searchResults = mutableListOf<SearchResult>()
+        
+        recordings.forEach { file ->
+            val transcription = preferencesManager.getTranscription(file.name)
+            if (transcription != null && transcription.contains(query, ignoreCase = true)) {
+                // 找到匹配的文本位置
+                var lastIndex = 0
+                while (true) {
+                    val index = transcription.indexOf(query, lastIndex, ignoreCase = true)
+                    if (index == -1) break
+                    
+                    // 获取上下文（前后各50个字符）
+                    val start = (index - 50).coerceAtLeast(0)
+                    val end = (index + query.length + 50).coerceAtMost(transcription.length)
+                    val context = transcription.substring(start, end)
+                    
+                    searchResults.add(SearchResult(file, context, index))
+                    lastIndex = index + 1
+                }
+            }
+        }
+        
+        if (searchResults.isNotEmpty()) {
+            searchResultsRecyclerView.visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
+            searchResultsRecyclerView.adapter = SearchResultsAdapter(searchResults) { result ->
+                val intent = Intent(this, RecordingDetailActivity::class.java)
+                intent.putExtra("fileName", result.file.name)
+                startActivity(intent)
+            }
+        } else {
+            searchResultsRecyclerView.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        }
+    }
+
     private fun updateRecordingsList() {
-        val recordings = audioFileManager.getRecordingsList()
+        recordings = audioFileManager.getRecordingsList()
         recyclerView.adapter = RecordingsAdapter(recordings) { file, position ->
             playRecording(file, position)
         }
+    }
+
+    data class SearchResult(
+        val file: File,
+        val context: String,
+        val position: Int
+    )
+
+    inner class SearchResultsAdapter(
+        private val results: List<SearchResult>,
+        private val onClick: (SearchResult) -> Unit
+    ) : RecyclerView.Adapter<SearchResultsAdapter.ViewHolder>() {
+
+        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+            val fileNameText: TextView = view.findViewById(R.id.fileNameText)
+            val contextText: TextView = view.findViewById(R.id.contextText)
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_search_result, parent, false)
+            return ViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val result = results[position]
+            holder.fileNameText.text = result.file.name
+            holder.contextText.text = result.context
+            holder.itemView.setOnClickListener { onClick(result) }
+        }
+
+        override fun getItemCount() = results.size
     }
 
     private fun playRecording(file: File, position: Int) {

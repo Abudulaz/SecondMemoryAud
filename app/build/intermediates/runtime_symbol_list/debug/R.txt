@@ -3089,6 +3089,7 @@ int drawable notification_tile_bg 0x7f0700e4
 int drawable notify_panel_notification_icon_bg 0x7f0700e5
 int drawable player_controls_background 0x7f0700e6
 int drawable recording_info_background 0x7f0700e7
+int drawable search_background 0x7f0700ec
 int drawable search_results_background 0x7f0700e8
 int drawable test_level_drawable 0x7f0700e9
 int drawable tooltip_frame_dark 0x7f0700ea
@@ -3223,6 +3224,7 @@ int id constraint 0x7f08007e
 int id container 0x7f08007f
 int id content 0x7f080080
 int id contentPanel 0x7f080081
+int id contextText 0x7f080210
 int id contiguous 0x7f080082
 int id continuousVelocity 0x7f080083
 int id coordinator 0x7f080084
@@ -3281,6 +3283,7 @@ int id exitUntilCollapsed 0x7f0800b8
 int id expand_activities_button 0x7f0800b9
 int id expanded_menu 0x7f0800ba
 int id fade 0x7f0800bb
+int id fileNameText 0x7f080211
 int id fill 0x7f0800bc
 int id fill_horizontal 0x7f0800bd
 int id fill_vertical 0x7f0800be
@@ -3493,6 +3496,7 @@ int id scrollView 0x7f08018c
 int id scrollable 0x7f08018d
 int id searchInput 0x7f08018e
 int id searchResultsRecyclerView 0x7f08018f
+int id searchView 0x7f080212
 int id search_badge 0x7f080190
 int id search_bar 0x7f080191
 int id search_button 0x7f080192
@@ -3758,6 +3762,7 @@ int layout design_text_input_start_icon 0x7f0b002f
 int layout ime_base_split_test_activity 0x7f0b0030
 int layout ime_secondary_split_test_activity 0x7f0b0031
 int layout item_recording 0x7f0b0032
+int layout item_search_result 0x7f0b0070
 int layout m3_alert_dialog 0x7f0b0033
 int layout m3_alert_dialog_actions 0x7f0b0034
 int layout m3_alert_dialog_title 0x7f0b0035
