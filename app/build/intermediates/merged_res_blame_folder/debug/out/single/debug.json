@@ -1,86 +1,78 @@
 [
     {
-        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\drawable_player_controls_background.xml.flat",
-        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\drawable\\player_controls_background.xml"
+        "merged": "com.secondmemory.app-merged_res-34:/drawable_recording_info_background.xml.flat",
+        "source": "com.secondmemory.app-main-36:/drawable/recording_info_background.xml"
     },
     {
         "merged": "com.secondmemory.app-merged_res-34:/layout_item_recording.xml.flat",
         "source": "com.secondmemory.app-main-36:/layout/item_recording.xml"
     },
     {
-        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\drawable_recording_info_background.xml.flat",
-        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\drawable\\recording_info_background.xml"
+        "merged": "com.secondmemory.app-merged_res-34:/drawable_ic_mic.xml.flat",
+        "source": "com.secondmemory.app-main-36:/drawable/ic_mic.xml"
     },
     {
-        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\layout_item_recording.xml.flat",
-        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\layout\\item_recording.xml"
+        "merged": "com.secondmemory.app-merged_res-34:/drawable_ic_pause.xml.flat",
+        "source": "com.secondmemory.app-main-36:/drawable/ic_pause.xml"
     },
     {
-        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
-        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+        "merged": "com.secondmemory.app-merged_res-34:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.secondmemory.app-main-36:/drawable/ic_launcher_foreground.xml"
     },
     {
-        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\layout_item_search_result.xml.flat",
-        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\layout\\item_search_result.xml"
+        "merged": "com.secondmemory.app-merged_res-34:/drawable_ic_transcribe.xml.flat",
+        "source": "com.secondmemory.app-main-36:/drawable/ic_transcribe.xml"
     },
     {
-        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\layout_activity_recording_detail.xml.flat",
-        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\layout\\activity_recording_detail.xml"
+        "merged": "com.secondmemory.app-merged_res-34:/drawable_search_results_background.xml.flat",
+        "source": "com.secondmemory.app-main-36:/drawable/search_results_background.xml"
     },
     {
-        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\drawable_ic_play.xml.flat",
-        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\drawable\\ic_play.xml"
+        "merged": "com.secondmemory.app-merged_res-34:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.secondmemory.app-main-36:/mipmap-anydpi-v26/ic_launcher_round.xml"
     },
     {
-        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\drawable_search_background.xml.flat",
-        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\drawable\\search_background.xml"
+        "merged": "com.secondmemory.app-merged_res-34:/drawable_ic_play.xml.flat",
+        "source": "com.secondmemory.app-main-36:/drawable/ic_play.xml"
     },
     {
-        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\layout_activity_main.xml.flat",
-        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\layout\\activity_main.xml"
+        "merged": "com.secondmemory.app-merged_res-34:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.secondmemory.app-main-36:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.secondmemory.app-merged_res-34:/layout_item_search_result.xml.flat",
+        "source": "com.secondmemory.app-main-36:/layout/item_search_result.xml"
+    },
+    {
+        "merged": "com.secondmemory.app-merged_res-34:/layout_activity_recordings.xml.flat",
+        "source": "com.secondmemory.app-main-36:/layout/activity_recordings.xml"
+    },
+    {
+        "merged": "com.secondmemory.app-merged_res-34:/layout_activity_main.xml.flat",
+        "source": "com.secondmemory.app-main-36:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.secondmemory.app-merged_res-34:/drawable_player_controls_background.xml.flat",
+        "source": "com.secondmemory.app-main-36:/drawable/player_controls_background.xml"
+    },
+    {
+        "merged": "com.secondmemory.app-merged_res-34:/drawable_ic_stop.xml.flat",
+        "source": "com.secondmemory.app-main-36:/drawable/ic_stop.xml"
+    },
+    {
+        "merged": "com.secondmemory.app-merged_res-34:/layout_activity_settings.xml.flat",
+        "source": "com.secondmemory.app-main-36:/layout/activity_settings.xml"
     },
     {
         "merged": "com.secondmemory.app-merged_res-34:/layout_activity_recording_detail.xml.flat",
         "source": "com.secondmemory.app-main-36:/layout/activity_recording_detail.xml"
     },
     {
-        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\layout_activity_recordings.xml.flat",
-        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\layout\\activity_recordings.xml"
+        "merged": "com.secondmemory.app-merged_res-34:/drawable_search_background.xml.flat",
+        "source": "com.secondmemory.app-main-36:/drawable/search_background.xml"
     },
     {
-        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
-        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\mipmap-anydpi-v26\\ic_launcher.xml"
-    },
-    {
-        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\menu_recording_item_menu.xml.flat",
-        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\menu\\recording_item_menu.xml"
-    },
-    {
-        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\drawable_search_results_background.xml.flat",
-        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\drawable\\search_results_background.xml"
-    },
-    {
-        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\drawable_ic_launcher_foreground.xml.flat",
-        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\drawable\\ic_launcher_foreground.xml"
-    },
-    {
-        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\drawable_ic_pause.xml.flat",
-        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\drawable\\ic_pause.xml"
-    },
-    {
-        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\drawable_ic_mic.xml.flat",
-        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\drawable\\ic_mic.xml"
-    },
-    {
-        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\drawable_ic_stop.xml.flat",
-        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\drawable\\ic_stop.xml"
-    },
-    {
-        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\drawable_ic_transcribe.xml.flat",
-        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\drawable\\ic_transcribe.xml"
-    },
-    {
-        "merged": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-merged_res-34:\\layout_activity_settings.xml.flat",
-        "source": "C:\\Users\\Zahee\\.gradle\\daemon\\8.9\\com.secondmemory.app-main-36:\\layout\\activity_settings.xml"
+        "merged": "com.secondmemory.app-merged_res-34:/menu_recording_item_menu.xml.flat",
+        "source": "com.secondmemory.app-main-36:/menu/recording_item_menu.xml"
     }
 ]

@@ -46,9 +46,9 @@ class MainActivity : AppCompatActivity() {
             .usePlugin(ImagesPlugin.create())
             .build()
 
-        // 复制并读取develog.md文件
-        FileUtils.copyAssetToInternal(this, "develog.md", "develog.md")
-        val devlogFile = File(filesDir, "develog.md")
+        // 复制并读取devlog.md文件
+        FileUtils.copyAssetToInternal(this, "devlog.md", "devlog.md")
+        val devlogFile = File(filesDir, "devlog.md")
         val markdown = devlogFile.readText()
         markwon.setMarkdown(markdownView, markdown)
     }
@@ -136,8 +136,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // 重新读取develog.md文件
-        val devlogFile = File(filesDir, "develog.md")
+        // 每次恢复时重新复制并读取devlog.md文件
+        FileUtils.copyAssetToInternal(this, "devlog.md", "devlog.md")
+        val devlogFile = File(filesDir, "devlog.md")
         val markdown = devlogFile.readText()
         markwon.setMarkdown(markdownView, markdown)
     }
